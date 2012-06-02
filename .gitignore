@@ -1,0 +1,9 @@
+.*
+!.gitignore
+*.iml
+local.properties
+gen/*
+out/*
+bin/*
+tmp/*
+target/*

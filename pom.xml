@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.therap</groupId>
+    <artifactId>password-reset</artifactId>
+    <version>1.0</version>
+
+    <properties>
+        <roboguice.version>2.0</roboguice.version>
+        <slf4j.android.version>1.6.1-RC1</slf4j.android.version>
+        <android.support-v4.version>r7</android.support-v4.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.roboguice</groupId>
+            <artifactId>roboguice</artifactId>
+            <version>${roboguice.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-android</artifactId>
+            <version>${slf4j.android.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>support-v4</artifactId>
+            <version>${android.support-v4.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>
