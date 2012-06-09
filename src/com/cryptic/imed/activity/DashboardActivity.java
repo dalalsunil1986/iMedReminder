@@ -1,7 +1,8 @@
-package com.cryptic.imed;
+package com.cryptic.imed.activity;
 
 import android.os.Bundle;
 import android.view.View;
+import com.cryptic.imed.R;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import roboguice.activity.RoboActivity;
