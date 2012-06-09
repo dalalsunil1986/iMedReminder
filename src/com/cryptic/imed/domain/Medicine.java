@@ -16,7 +16,7 @@ public class Medicine {
     private String name;
 
     @DatabaseField(canBeNull = false)
-    private String measurementUnit;
+    private MedicationUnit medicationUnit;
 
     @DatabaseField
     private float currentStock;
@@ -40,12 +40,12 @@ public class Medicine {
         this.name = name;
     }
 
-    public String getMeasurementUnit() {
-        return measurementUnit;
+    public MedicationUnit getMedicationUnit() {
+        return medicationUnit;
     }
 
-    public void setMeasurementUnit(String measurementUnit) {
-        this.measurementUnit = measurementUnit;
+    public void setMedicationUnit(MedicationUnit medicationUnit) {
+        this.medicationUnit = medicationUnit;
     }
 
     public float getCurrentStock() {
@@ -84,7 +84,7 @@ public class Medicine {
         return "Medicine{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", measurementUnit='" + measurementUnit + '\'' +
+                ", medicationUnit='" + medicationUnit + '\'' +
                 ", currentStock=" + currentStock +
                 ", photo=" + (photo != null ? photo.length : 0) + "bytes" +
                 '}';
