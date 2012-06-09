@@ -20,10 +20,18 @@
             <ImageView android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
                        android:layout_marginLeft="15dp"
+                       android:layout_marginRight="15dp"
                        android:layout_gravity="center_vertical"
                        android:contentDescription="@string/medicines"
                        android:onClick="onMedicinesClicked"
                        android:src="@drawable/medicine"/>
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginLeft="15dp"
+                       android:layout_gravity="center_vertical"
+                       android:contentDescription="@string/prescriptions"
+                       android:onClick="onDoctorsClicked"
+                       android:src="@drawable/doctor"/>
         </TableRow>
         <TableRow android:layout_marginLeft="15dp"
                   android:layout_marginRight="15dp">
@@ -38,11 +46,20 @@
             <TextView android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
                       android:layout_marginLeft="15dp"
+                      android:layout_marginRight="15dp"
                       android:gravity="center"
                       android:textAppearance="@android:style/TextAppearance.Medium"
                       android:clickable="true"
                       android:onClick="onMedicinesClicked"
                       android:text="@string/medicines"/>
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="15dp"
+                      android:gravity="center"
+                      android:textAppearance="@android:style/TextAppearance.Medium"
+                      android:clickable="true"
+                      android:onClick="onDoctorsClicked"
+                      android:text="@string/doctors"/>
         </TableRow>
 
         <TableRow android:layout_marginLeft="15dp"
@@ -52,42 +69,12 @@
                        android:layout_height="wrap_content"
                        android:layout_marginRight="15dp"
                        android:layout_gravity="center_vertical"
-                       android:contentDescription="@string/prescriptions"
-                       android:onClick="onDoctorsClicked"
-                       android:src="@drawable/doctor"/>
-            <ImageView android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:layout_marginLeft="15dp"
-                       android:layout_gravity="center_vertical"
                        android:contentDescription="@string/medicines"
                        android:onClick="onPharmaciesClicked"
                        android:src="@drawable/pharmacy"/>
-        </TableRow>
-        <TableRow android:layout_marginLeft="15dp"
-                  android:layout_marginRight="15dp">
-            <TextView android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:layout_marginRight="15dp"
-                      android:gravity="center"
-                      android:textAppearance="@android:style/TextAppearance.Medium"
-                      android:clickable="true"
-                      android:onClick="onDoctorsClicked"
-                      android:text="@string/doctors"/>
-            <TextView android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:layout_marginLeft="15dp"
-                      android:gravity="center"
-                      android:textAppearance="@android:style/TextAppearance.Medium"
-                      android:clickable="true"
-                      android:onClick="onPharmaciesClicked"
-                      android:text="@string/pharmacies"/>
-        </TableRow>
-
-        <TableRow android:layout_marginLeft="15dp"
-                  android:layout_marginRight="15dp"
-                  android:layout_marginTop="20dp">
             <ImageView android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
+                       android:layout_marginLeft="15dp"
                        android:layout_marginRight="15dp"
                        android:layout_gravity="center_vertical"
                        android:contentDescription="@string/prescriptions"
@@ -105,6 +92,15 @@
                   android:layout_marginRight="15dp">
             <TextView android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
+                      android:layout_marginRight="15dp"
+                      android:gravity="center"
+                      android:textAppearance="@android:style/TextAppearance.Medium"
+                      android:clickable="true"
+                      android:onClick="onPharmaciesClicked"
+                      android:text="@string/pharmacies"/>
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="15dp"
                       android:layout_marginRight="15dp"
                       android:gravity="center"
                       android:textAppearance="@android:style/TextAppearance.Medium"

@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">iMedReminder</string>
+    <string name="prescriptions">Prescriptions</string>
+    <string name="medicines">Medicines</string>
+    <string name="doctors">Doctors</string>
+    <string name="pharmacies">Pharmacies</string>
+    <string name="appointments">Appointments</string>
+    <string name="schedules">Schedules</string>
 </resources>
