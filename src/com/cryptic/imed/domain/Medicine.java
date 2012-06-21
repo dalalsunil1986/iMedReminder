@@ -1,5 +1,6 @@
 package com.cryptic.imed.domain;
 
+import com.cryptic.imed.utils.Filterable;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -8,7 +9,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * @author sharafat
  */
 @DatabaseTable
-public class Medicine {
+public class Medicine implements Filterable {
     @DatabaseField(generatedId = true)
     private int id;
 
@@ -88,5 +89,10 @@ public class Medicine {
                 ", currentStock=" + currentStock +
                 ", photo=" + (photo != null ? photo.length : 0) + "bytes" +
                 '}';
+    }
+
+    @Override
+    public String getFilterableText() {
+        return name;
     }
 }

@@ -1,5 +1,6 @@
 package com.cryptic.imed.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import com.cryptic.imed.R;
@@ -22,7 +23,7 @@ public class DashboardActivity extends RoboActivity {
     }
 
     public void onMedicinesClicked(View view) {
-        log.debug("Medicines clicked");
+        startActivity(new Intent(this, MedicineListActivity.class));
     }
 
     public void onDoctorsClicked(View view) {
