@@ -16,6 +16,9 @@ public class Medicine implements Filterable {
     @DatabaseField(canBeNull = false)
     private String name;
 
+    @DatabaseField
+    private String details;
+
     @DatabaseField(canBeNull = false)
     private MedicationUnit medicationUnit;
 
@@ -39,6 +42,14 @@ public class Medicine implements Filterable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
     }
 
     public MedicationUnit getMedicationUnit() {
@@ -85,6 +96,7 @@ public class Medicine implements Filterable {
         return "Medicine{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", details='" + details + '\'' +
                 ", medicationUnit='" + medicationUnit + '\'' +
                 ", currentStock=" + currentStock +
                 ", photo=" + (photo != null ? photo.length : 0) + "bytes" +
