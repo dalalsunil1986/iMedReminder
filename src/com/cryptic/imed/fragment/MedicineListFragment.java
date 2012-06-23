@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.*;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import com.cryptic.imed.R;
@@ -17,6 +18,7 @@ import com.cryptic.imed.utils.FilterableArrayAdapter;
 import com.cryptic.imed.utils.StringUtils;
 import com.cryptic.imed.utils.TwoLineListItemWithImageView;
 import com.google.inject.Inject;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectResource;
 
@@ -26,6 +28,13 @@ import java.util.Comparator;
  * @author sharafat
  */
 public class MedicineListFragment extends RoboListFragment {
+    public static final String KEY_MEDICINE_TO_BE_EDITED = "medicine_to_be_edited";
+
+    private static final int CONTEXT_MENU_EDIT = 0;
+    private static final int CONTEXT_MENU_DELETE = 1;
+
+    private final RuntimeExceptionDao<Medicine, Integer> medicineDao;
+
     @Inject
     private Application application;
     @Inject
@@ -33,6 +42,20 @@ public class MedicineListFragment extends RoboListFragment {
 
     @InjectResource(R.string.x_units_available)
     private String xUnitsAvailable;
+    @InjectResource(R.string.edit)
+    private String edit;
+    @InjectResource(R.string.delete)
+    private String delete;
+
+    public MedicineListFragment() {
+        medicineDao = DbHelper.getHelper().getRuntimeExceptionDao(Medicine.class);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        DbHelper.release();
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -59,12 +82,54 @@ public class MedicineListFragment extends RoboListFragment {
             }
         });
 
+        registerForContextMenu(getListView());
         setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.list_view, container, false);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        Medicine selectedMedicine = (Medicine) getListAdapter().getItem(info.position);
+
+        menu.setHeaderTitle(selectedMedicine.getName());
+        menu.add(Menu.NONE, CONTEXT_MENU_EDIT, 0, edit);
+        menu.add(Menu.NONE, CONTEXT_MENU_DELETE, 0, delete);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Medicine selectedMedicine = (Medicine) getListAdapter().getItem(info.position);
+
+        switch (item.getItemId()) {
+            case CONTEXT_MENU_EDIT:
+                Intent intent = new Intent(application, NewMedicineActivity.class);
+                intent.putExtra(KEY_MEDICINE_TO_BE_EDITED, selectedMedicine);
+                startActivity(intent);
+                return true;
+            case CONTEXT_MENU_DELETE:
+                deleteMedicine(selectedMedicine);
+                updateMedicineList(selectedMedicine);
+                return true;
+        }
+
+        return false;
+    }
+
+    private void deleteMedicine(Medicine selectedMedicine) {
+        selectedMedicine.setDeleted(true);
+        medicineDao.update(selectedMedicine);
+    }
+
+    private void updateMedicineList(Medicine selectedMedicine) {
+        MedicineListAdapter medicineListAdapter = (MedicineListAdapter) getListAdapter();
+        medicineListAdapter.remove(selectedMedicine);
+        medicineListAdapter.notifyDataSetInvalidated();
     }
 
     @Override
@@ -88,7 +153,9 @@ public class MedicineListFragment extends RoboListFragment {
         @SuppressWarnings("unchecked")
         MedicineListAdapter() {
             super(application, 0);
-            addAll(DbHelper.getHelper().getRuntimeExceptionDao(Medicine.class).queryForAll());
+
+            addAll(medicineDao.queryForEq("deleted", false));
+
             sort(new Comparator<Filterable>() {
                 @Override
                 public int compare(Filterable lhs, Filterable rhs) {
