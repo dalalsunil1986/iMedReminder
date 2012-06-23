@@ -3,6 +3,9 @@
     <string name="app_name">iMedReminder</string>
     <string name="type_to_filter">Type to filter…</string>
     <string name="list_empty">The list is empty. Please use the menu to add items.</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="required">Required</string>
 
     <!-- Dashboard -->
     <string name="prescriptions">Prescriptions</string>
@@ -13,6 +16,18 @@
     <string name="schedules">Schedules</string>
 
     <!-- Medicine List -->
+    <string name="medicine_list">Medicine List</string>
     <string name="x_units_available">%1$s %2$s available</string>
     <string name="new_medicine">New Medicine</string>
+
+    <!-- Add/Edit Medicine -->
+    <string name="medicine_name">Medicine Name</string>
+    <string name="details">Details</string>
+    <string name="current_stock">Current Stock</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="remove_photo">Remove Photo</string>
+    <string name="camera_unavailable">Sorry, your device does not have any camera.</string>
+    <string name="add_medicine_photo">Add Medicine Photo</string>
+    <string name="take_from_camera">Take From Camera</string>
+    <string name="pick_from_gallery">Pick From Gallery</string>
 </resources>

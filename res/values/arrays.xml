@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="photo_taking_options">
+        <item>@string/take_from_camera</item>
+        <item>@string/pick_from_gallery</item>
+    </string-array>
+</resources>

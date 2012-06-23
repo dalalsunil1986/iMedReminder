@@ -1,6 +1,7 @@
 package com.cryptic.imed.fragment;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,13 +9,13 @@ import android.view.*;
 import android.widget.EditText;
 import android.widget.ListView;
 import com.cryptic.imed.R;
+import com.cryptic.imed.activity.NewMedicineActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.domain.Medicine;
 import com.cryptic.imed.utils.FilterableArrayAdapter;
+import com.cryptic.imed.utils.StringUtils;
 import com.cryptic.imed.utils.TwoLineListItemWithImageView;
 import com.google.inject.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectResource;
 
@@ -22,8 +23,6 @@ import roboguice.inject.InjectResource;
  * @author sharafat
  */
 public class MedicineListFragment extends RoboListFragment {
-    private static final Logger log = LoggerFactory.getLogger(MedicineListFragment.class);
-
     @Inject
     private Application application;
     @Inject
@@ -74,7 +73,7 @@ public class MedicineListFragment extends RoboListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_new_medicine:
-                log.debug("New Medicine menu selected");
+                startActivity(new Intent(application, NewMedicineActivity.class));
                 break;
         }
 
@@ -93,7 +92,7 @@ public class MedicineListFragment extends RoboListFragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             Medicine medicine = (Medicine) getItem(position);
             return TwoLineListItemWithImageView.getView(layoutInflater, convertView, parent, medicine.getName(),
-                    String.format(xUnitsAvailable, medicine.getCurrentStock() == 0 ? "0" : medicine.getCurrentStock(),
+                    String.format(xUnitsAvailable, StringUtils.dropDecimalIfRoundNumber(medicine.getCurrentStock()),
                             medicine.getMedicationUnit()), medicine.getPhoto());
         }
     }

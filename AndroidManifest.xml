@@ -11,6 +11,9 @@
                       android:largeScreens="true"
                       android:anyDensity="true"/>
 
+    <!-- WRITE_EXTERNAL_STORAGE permission is needed to delete temp photo capture files created on sdcard -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <application android:label="@string/app_name"
                  android:icon="@drawable/ic_launcher"
                  android:theme="@style/iMed.Theme.Light">
@@ -23,6 +26,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MedicineListActivity"
+                  android:label="@string/medicine_list"
+                  android:windowSoftInputMode="stateHidden"
+                  android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".activity.NewMedicineActivity"
+                  android:label="@string/new_medicine"
                   android:windowSoftInputMode="stateHidden"
                   android:configChanges="orientation|screenSize|keyboardHidden"/>
     </application>
