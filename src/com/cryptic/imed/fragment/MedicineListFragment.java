@@ -98,9 +98,19 @@ public class MedicineListFragment extends RoboListFragment {
     }
 
     private void selectFirstItemInList() {
-        if (getListAdapter().getCount() > 0) {
-            getListView().setItemChecked(0, true);
-            updateDetailsFragment(getListAdapter().getItem(0));
+        selectItemInList(0);
+    }
+
+    private void selectItemInList(int position) {
+        int itemCount = getListAdapter().getCount();
+        if (itemCount > 0) {
+            if (position < itemCount) {
+                getListView().setItemChecked(position, true);
+                updateDetailsFragment(getListAdapter().getItem(position));
+            } else {
+                throw new ArrayIndexOutOfBoundsException("list item count = " + itemCount
+                        + ", but position given = " + position);
+            }
         } else {
             updateDetailsFragment(null);
         }
@@ -147,9 +157,13 @@ public class MedicineListFragment extends RoboListFragment {
 
     public void deleteMedicineAndUpdateView(Medicine selectedMedicine) {
         deleteMedicine(selectedMedicine);
-        updateMedicineList(selectedMedicine);
+        int selectedMedicineIndex = updateMedicineList(selectedMedicine);
         if (dualPane) {
-            selectFirstItemInList();
+            try {
+                selectItemInList(selectedMedicineIndex);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                selectItemInList(selectedMedicineIndex - 1);
+            }
         }
     }
 
@@ -158,10 +172,15 @@ public class MedicineListFragment extends RoboListFragment {
         medicineDao.update(selectedMedicine);
     }
 
-    private void updateMedicineList(Medicine selectedMedicine) {
+    private int updateMedicineList(Medicine selectedMedicine) {
         MedicineListAdapter medicineListAdapter = (MedicineListAdapter) getListAdapter();
+
+        int selectedMedicineIndex = medicineListAdapter.getPosition(selectedMedicine);
+
         medicineListAdapter.remove(selectedMedicine);
         medicineListAdapter.notifyDataSetInvalidated();
+
+        return selectedMedicineIndex;
     }
 
     @Override
