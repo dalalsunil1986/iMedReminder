@@ -39,6 +39,8 @@ import java.io.Serializable;
 public class AddEditMedicineActivity extends RoboActivity {
     private static final int PHOTO_SIZE = 64;
 
+    private final RuntimeExceptionDao<Medicine, Integer> medicineDao;
+
     @Inject
     private PhotoTaker photoTaker;
 
@@ -66,6 +68,10 @@ public class AddEditMedicineActivity extends RoboActivity {
     private OnPhotoTakeListener onPhotoTakeListener;
 
     private Medicine medicine;
+
+    public AddEditMedicineActivity() {
+        medicineDao = DbHelper.getHelper().getRuntimeExceptionDao(Medicine.class);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -196,12 +202,10 @@ public class AddEditMedicineActivity extends RoboActivity {
         medicine.setCurrentStock(getCurrentStockFromUserInput());
         medicine.setMedicationUnit((MedicationUnit) medicationUnitSpinner.getSelectedItem());
 
-        RuntimeExceptionDao<Medicine, Integer> runtimeExceptionDao =
-                DbHelper.getHelper().getRuntimeExceptionDao(Medicine.class);
         if (medicine.getId() == 0) {
-            runtimeExceptionDao.create(medicine);
+            medicineDao.create(medicine);
         } else {
-            runtimeExceptionDao.update(medicine);
+            medicineDao.update(medicine);
         }
     }
 

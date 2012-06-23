@@ -130,12 +130,16 @@ public class MedicineListFragment extends RoboListFragment {
                 startActivity(intent);
                 return true;
             case CONTEXT_MENU_DELETE:
-                deleteMedicine(selectedMedicine);
-                updateMedicineList(selectedMedicine);
+                deleteMedicineAndUpdateList(selectedMedicine);
                 return true;
         }
 
         return false;
+    }
+
+    public void deleteMedicineAndUpdateList(Medicine selectedMedicine) {
+        deleteMedicine(selectedMedicine);
+        updateMedicineList(selectedMedicine);
     }
 
     private void deleteMedicine(Medicine selectedMedicine) {
