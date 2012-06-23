@@ -1,7 +1,6 @@
 package com.cryptic.imed.util;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.cryptic.imed.R;
+import com.cryptic.imed.photo.util.BitmapByteArrayConverter;
 
 /**
  * @author sharafat
@@ -23,6 +23,8 @@ public class TwoLineListItemWithImageView {
         ImageView imageView = (ImageView) convertView.findViewById(R.id.image);
         if (imageResId != 0) {
             imageView.setImageResource(imageResId);
+        } else {
+            imageView.setImageDrawable(null);
         }
 
         return convertView;
@@ -31,7 +33,7 @@ public class TwoLineListItemWithImageView {
     public static View getView(LayoutInflater layoutInflater, View convertView, ViewGroup parent,
                                String primaryText, String secondaryText, byte[] image) {
         return getView(layoutInflater, convertView, parent, primaryText, secondaryText,
-                image == null ? null : BitmapFactory.decodeByteArray(image, 0, image.length));
+                image == null ? null : BitmapByteArrayConverter.byteArray2Bitmap(image));
     }
 
     public static View getView(LayoutInflater layoutInflater, View convertView, ViewGroup parent,
@@ -42,6 +44,8 @@ public class TwoLineListItemWithImageView {
         ImageView imageView = (ImageView) convertView.findViewById(R.id.image);
         if (image != null) {
             imageView.setImageBitmap(image);
+        } else {
+            imageView.setImageDrawable(null);
         }
 
         return convertView;
