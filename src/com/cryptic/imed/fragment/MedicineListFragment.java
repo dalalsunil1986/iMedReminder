@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Filter;
 import android.widget.ListView;
 import com.cryptic.imed.R;
 import com.cryptic.imed.activity.AddEditMedicineActivity;
@@ -74,7 +75,14 @@ public class MedicineListFragment extends RoboListFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                ((MedicineListAdapter) getListAdapter()).getFilter().filter(s);
+                ((MedicineListAdapter) getListAdapter()).getFilter().filter(s, new Filter.FilterListener() {
+                    @Override
+                    public void onFilterComplete(int count) {
+                        if (dualPane) {
+                            selectFirstItemInList();
+                        }
+                    }
+                });
             }
         });
 
@@ -130,16 +138,19 @@ public class MedicineListFragment extends RoboListFragment {
                 startActivity(intent);
                 return true;
             case CONTEXT_MENU_DELETE:
-                deleteMedicineAndUpdateList(selectedMedicine);
+                deleteMedicineAndUpdateView(selectedMedicine);
                 return true;
         }
 
         return false;
     }
 
-    public void deleteMedicineAndUpdateList(Medicine selectedMedicine) {
+    public void deleteMedicineAndUpdateView(Medicine selectedMedicine) {
         deleteMedicine(selectedMedicine);
         updateMedicineList(selectedMedicine);
+        if (dualPane) {
+            selectFirstItemInList();
+        }
     }
 
     private void deleteMedicine(Medicine selectedMedicine) {
@@ -166,7 +177,7 @@ public class MedicineListFragment extends RoboListFragment {
                 break;
         }
 
-        return true;
+        return false;
     }
 
     @Override

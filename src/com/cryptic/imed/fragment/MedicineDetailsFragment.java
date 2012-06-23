@@ -119,7 +119,7 @@ public class MedicineDetailsFragment extends RoboFragment {
                 break;
             case R.id.menu_delete:
                 if (dualPanel) {
-                    medicineListFragment.deleteMedicineAndUpdateList(medicine);
+                    medicineListFragment.deleteMedicineAndUpdateView(medicine);
                 } else {
                     medicine.setDeleted(true);
                     medicineDao.update(medicine);
@@ -131,7 +131,7 @@ public class MedicineDetailsFragment extends RoboFragment {
                 break;
         }
 
-        return true;
+        return false;
     }
 
     @Override
