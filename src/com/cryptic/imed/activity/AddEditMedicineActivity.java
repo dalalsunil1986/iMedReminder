@@ -16,10 +16,12 @@ import com.cryptic.imed.R;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.domain.MedicationUnit;
 import com.cryptic.imed.domain.Medicine;
+import com.cryptic.imed.fragment.MedicineListFragment;
 import com.cryptic.imed.photo.camera.CameraUnavailableException;
 import com.cryptic.imed.photo.camera.OnPhotoTakeListener;
 import com.cryptic.imed.photo.camera.PhotoTaker;
 import com.cryptic.imed.photo.utils.BitmapByteArrayConverter;
+import com.cryptic.imed.utils.StringUtils;
 import com.cryptic.imed.utils.Validation;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
@@ -28,11 +30,13 @@ import roboguice.inject.ContentView;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 
+import java.io.Serializable;
+
 /**
  * @author sharafat
  */
 @ContentView(R.layout.new_medicine)
-public class NewMedicineActivity extends RoboActivity {
+public class AddEditMedicineActivity extends RoboActivity {
     private static final int PHOTO_SIZE = 64;
 
     @Inject
@@ -60,8 +64,10 @@ public class NewMedicineActivity extends RoboActivity {
 
     private AlertDialog addMedicinePhotoDialog;
     private OnPhotoTakeListener onPhotoTakeListener;
-    private byte[] medicinePhoto;
 
+    private Medicine medicine;
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -70,14 +76,39 @@ public class NewMedicineActivity extends RoboActivity {
         createAddMedicinePhotoDialog();
         setOnPhotoTakeListener();
         registerForContextMenu(takePhotoButton);
+        prepareMedicine(getIntent().getSerializableExtra(MedicineListFragment.KEY_MEDICINE_TO_BE_EDITED));
+    }
+
+    private void prepareMedicine(Serializable medicineToBeEdited) {
+        if (medicineToBeEdited == null) {
+            medicine = new Medicine();
+        } else {
+            medicine = (Medicine) medicineToBeEdited;
+            updateViewWithMedicineDetails();
+        }
+    }
+
+    private void updateViewWithMedicineDetails() {
+        medNameInput.setText(medicine.getName());
+        detailsInput.setText(medicine.getDetails());
+        currentStockInput.setText(StringUtils.dropDecimalIfRoundNumber(medicine.getCurrentStock()));
+        for (int i = 0; i < medicationUnitSpinner.getAdapter().getCount(); i++) {
+            if (medicationUnitSpinner.getAdapter().getItem(i) == medicine.getMedicationUnit()) {
+                medicationUnitSpinner.setSelection(i);
+                break;
+            }
+        }
+        if (medicine.getPhoto() != null) {
+            takePhotoButton.setImageBitmap(BitmapByteArrayConverter.byteArray2Bitmap(medicine.getPhoto()));
+        }
     }
 
     private void setOnPhotoTakeListener() {
         onPhotoTakeListener = new OnPhotoTakeListener() {
             @Override
             public void onPhotoTaken(Bitmap photo) {
-                medicinePhoto = BitmapByteArrayConverter.bitmap2ByteArray(photo);
-                if (medicinePhoto != null) {
+                if (photo != null) {
+                    medicine.setPhoto(BitmapByteArrayConverter.bitmap2ByteArray(photo));
                     takePhotoButton.setImageBitmap(photo);
                 }
             }
@@ -108,7 +139,7 @@ public class NewMedicineActivity extends RoboActivity {
                                 try {
                                     photoTaker.takePhotoFromCamera();
                                 } catch (CameraUnavailableException e) {
-                                    new AlertDialog.Builder(NewMedicineActivity.this)
+                                    new AlertDialog.Builder(AddEditMedicineActivity.this)
                                             .setMessage(R.string.camera_unavailable).create().show();
                                     takePhotoButton.setEnabled(false);
                                 }
@@ -123,7 +154,7 @@ public class NewMedicineActivity extends RoboActivity {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if (v == takePhotoButton && medicinePhoto != null) {
+        if (v == takePhotoButton && medicine.getPhoto() != null) {
             menu.add(removePhoto);
         }
     }
@@ -131,7 +162,7 @@ public class NewMedicineActivity extends RoboActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle().equals(removePhoto)) {
-            medicinePhoto = null;
+            medicine.setPhoto(null);
             takePhotoButton.setImageResource(R.drawable.take_photo);
             return true;
         }
@@ -153,23 +184,25 @@ public class NewMedicineActivity extends RoboActivity {
             return;
         }
 
-        addMedicineToDatabase();
+        saveMedicine();
 
         startActivity(new Intent(this, MedicineListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         finish();
     }
 
-    private void addMedicineToDatabase() {
-        Medicine medicine = new Medicine();
+    private void saveMedicine() {
         medicine.setName(medNameInput.getText().toString());
         medicine.setDetails(detailsInput.getText().toString());
         medicine.setCurrentStock(getCurrentStockFromUserInput());
         medicine.setMedicationUnit((MedicationUnit) medicationUnitSpinner.getSelectedItem());
-        medicine.setPhoto(medicinePhoto);
 
         RuntimeExceptionDao<Medicine, Integer> runtimeExceptionDao =
                 DbHelper.getHelper().getRuntimeExceptionDao(Medicine.class);
-        runtimeExceptionDao.create(medicine);
+        if (medicine.getId() == 0) {
+            runtimeExceptionDao.create(medicine);
+        } else {
+            runtimeExceptionDao.update(medicine);
+        }
     }
 
     private float getCurrentStockFromUserInput() {
@@ -183,5 +216,11 @@ public class NewMedicineActivity extends RoboActivity {
 
     public void onCancelButtonClicked(View view) {
         finish();
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        DbHelper.release();
     }
 }

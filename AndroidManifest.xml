@@ -29,7 +29,7 @@
                   android:label="@string/medicine_list"
                   android:windowSoftInputMode="stateHidden"
                   android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".activity.NewMedicineActivity"
+        <activity android:name=".activity.AddEditMedicineActivity"
                   android:label="@string/new_medicine"
                   android:windowSoftInputMode="stateHidden"
                   android:configChanges="orientation|screenSize|keyboardHidden"/>

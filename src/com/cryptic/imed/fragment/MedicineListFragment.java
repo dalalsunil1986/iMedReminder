@@ -10,7 +10,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import com.cryptic.imed.R;
-import com.cryptic.imed.activity.NewMedicineActivity;
+import com.cryptic.imed.activity.AddEditMedicineActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.domain.Medicine;
 import com.cryptic.imed.utils.Filterable;
@@ -108,7 +108,7 @@ public class MedicineListFragment extends RoboListFragment {
 
         switch (item.getItemId()) {
             case CONTEXT_MENU_EDIT:
-                Intent intent = new Intent(application, NewMedicineActivity.class);
+                Intent intent = new Intent(application, AddEditMedicineActivity.class);
                 intent.putExtra(KEY_MEDICINE_TO_BE_EDITED, selectedMedicine);
                 startActivity(intent);
                 return true;
@@ -141,7 +141,7 @@ public class MedicineListFragment extends RoboListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_new_medicine:
-                startActivity(new Intent(application, NewMedicineActivity.class));
+                startActivity(new Intent(application, AddEditMedicineActivity.class));
                 break;
         }
 
