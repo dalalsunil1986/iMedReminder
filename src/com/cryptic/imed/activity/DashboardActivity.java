@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import com.cryptic.imed.R;
+import com.cryptic.imed.utils.IndefinitelyProgressingTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import roboguice.activity.RoboActivity;
@@ -23,7 +24,7 @@ public class DashboardActivity extends RoboActivity {
     }
 
     public void onMedicinesClicked(View view) {
-        startActivity(new Intent(this, MedicineListActivity.class));
+        startActivity(MedicineListActivity.class);
     }
 
     public void onDoctorsClicked(View view) {
@@ -40,5 +41,24 @@ public class DashboardActivity extends RoboActivity {
 
     public void onSchedulesClicked(View view) {
         log.debug("Schedules clicked");
+    }
+
+    private void startActivity(final Class<?> clazz) {
+        new IndefinitelyProgressingTask<Void>(this, "Loading...",
+                new IndefinitelyProgressingTask.OnTaskExecutionListener<Void>() {
+                    @Override
+                    public Void execute() {
+                        startActivity(new Intent(DashboardActivity.this, clazz));
+                        return null;
+                    }
+
+                    @Override
+                    public void onSuccess(Void result) {
+                    }
+
+                    @Override
+                    public void onException(Exception e) {
+                    }
+                }).execute();
     }
 }
