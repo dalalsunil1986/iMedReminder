@@ -12,6 +12,7 @@ import android.widget.Filter;
 import android.widget.ListView;
 import com.cryptic.imed.R;
 import com.cryptic.imed.activity.AddEditMedicineActivity;
+import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.activity.MedicineDetailsActivity;
 import com.cryptic.imed.activity.MedicineListActivity;
 import com.cryptic.imed.app.DbHelper;
@@ -88,6 +89,7 @@ public class MedicineListFragment extends RoboListFragment {
 
         registerForContextMenu(getListView());
         setHasOptionsMenu(true);
+        CompatibilityUtils.setHomeButtonEnabled(true, getActivity());
 
         dualPane = DualPaneUtils.isDualPane(getActivity(), R.id.details_container);
         if (dualPane) {
@@ -193,6 +195,9 @@ public class MedicineListFragment extends RoboListFragment {
         switch (item.getItemId()) {
             case R.id.menu_new_medicine:
                 startActivity(new Intent(application, AddEditMedicineActivity.class));
+                break;
+            case android.R.id.home:
+                startActivity(new Intent(application, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
         }
 

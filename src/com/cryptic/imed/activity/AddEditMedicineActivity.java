@@ -21,6 +21,7 @@ import com.cryptic.imed.photo.camera.CameraUnavailableException;
 import com.cryptic.imed.photo.camera.OnPhotoTakeListener;
 import com.cryptic.imed.photo.camera.PhotoTaker;
 import com.cryptic.imed.photo.util.BitmapByteArrayConverter;
+import com.cryptic.imed.util.CompatibilityUtils;
 import com.cryptic.imed.util.StringUtils;
 import com.cryptic.imed.util.Validation;
 import com.google.inject.Inject;
@@ -83,6 +84,8 @@ public class AddEditMedicineActivity extends RoboActivity {
         setOnPhotoTakeListener();
         registerForContextMenu(takePhotoButton);
         prepareMedicine(getIntent().getSerializableExtra(MedicineListFragment.KEY_MEDICINE));
+
+        CompatibilityUtils.setHomeButtonEnabled(true, this);
     }
 
     private void prepareMedicine(Serializable medicineToBeEdited) {
@@ -179,6 +182,17 @@ public class AddEditMedicineActivity extends RoboActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         photoTaker.onActivityResult(requestCode, resultCode, data, onPhotoTakeListener);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                startActivity(new Intent(this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                break;
+        }
+
+        return false;
     }
 
     public void onTakePhotoButtonClicked(View view) {

@@ -8,10 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.cryptic.imed.R;
 import com.cryptic.imed.activity.AddEditMedicineActivity;
+import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.activity.MedicineListActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.domain.Medicine;
 import com.cryptic.imed.photo.util.BitmapByteArrayConverter;
+import com.cryptic.imed.util.CompatibilityUtils;
 import com.cryptic.imed.util.DualPaneUtils;
 import com.cryptic.imed.util.StringUtils;
 import com.google.inject.Inject;
@@ -58,6 +60,8 @@ public class MedicineDetailsFragment extends RoboFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        CompatibilityUtils.setHomeButtonEnabled(true, getActivity());
 
         dualPanel = DualPaneUtils.isDualPane(getActivity(), R.id.list_container);
         if (dualPanel) {
@@ -128,6 +132,9 @@ public class MedicineDetailsFragment extends RoboFragment {
                     startActivity(medicineListActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     getActivity().finish();
                 }
+                break;
+            case android.R.id.home:
+                startActivity(new Intent(application, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
         }
 
