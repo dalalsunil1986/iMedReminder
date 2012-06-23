@@ -9,6 +9,7 @@
     <string name="required">Required</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="not_available">N/A</string>
 
     <!-- Dashboard -->
     <string name="prescriptions">Prescriptions</string>
@@ -22,6 +23,9 @@
     <string name="medicine_list">Medicine List</string>
     <string name="x_units_available">%1$s %2$s available</string>
     <string name="new_medicine">New Medicine</string>
+
+    <!-- Medicine Details -->
+    <string name="medicine_details">Medicine Details</string>
 
     <!-- Add/Edit Medicine -->
     <string name="medicine_name">Medicine Name</string>

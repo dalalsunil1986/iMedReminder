@@ -11,12 +11,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import com.cryptic.imed.R;
 import com.cryptic.imed.activity.AddEditMedicineActivity;
+import com.cryptic.imed.activity.MedicineDetailsActivity;
+import com.cryptic.imed.activity.MedicineListActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.domain.Medicine;
-import com.cryptic.imed.util.Filterable;
-import com.cryptic.imed.util.FilterableArrayAdapter;
-import com.cryptic.imed.util.StringUtils;
-import com.cryptic.imed.util.TwoLineListItemWithImageView;
+import com.cryptic.imed.util.*;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboListFragment;
@@ -28,7 +27,7 @@ import java.util.Comparator;
  * @author sharafat
  */
 public class MedicineListFragment extends RoboListFragment {
-    public static final String KEY_MEDICINE_TO_BE_EDITED = "medicine_to_be_edited";
+    public static final String KEY_MEDICINE = "medicine";
 
     private static final int CONTEXT_MENU_EDIT = 0;
     private static final int CONTEXT_MENU_DELETE = 1;
@@ -47,14 +46,11 @@ public class MedicineListFragment extends RoboListFragment {
     @InjectResource(R.string.delete)
     private String delete;
 
+    private boolean dualPane;
+    private MedicineDetailsFragment medicineDetailsFragment;
+
     public MedicineListFragment() {
         medicineDao = DbHelper.getHelper().getRuntimeExceptionDao(Medicine.class);
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        DbHelper.release();
     }
 
     @Override
@@ -84,6 +80,27 @@ public class MedicineListFragment extends RoboListFragment {
 
         registerForContextMenu(getListView());
         setHasOptionsMenu(true);
+
+        dualPane = DualPaneUtils.isDualPane(getActivity(), R.id.details_container);
+        if (dualPane) {
+            medicineDetailsFragment = (MedicineDetailsFragment)
+                    getFragmentManager().findFragmentByTag(MedicineListActivity.TAG_MEDICINE_DETAILS_FRAGMENT);
+            selectFirstItemInList();
+        }
+    }
+
+    private void selectFirstItemInList() {
+        if (getListAdapter().getCount() > 0) {
+            getListView().setItemChecked(0, true);
+            updateDetailsFragment(getListAdapter().getItem(0));
+        } else {
+            updateDetailsFragment(null);
+        }
+    }
+
+    private void updateDetailsFragment(Object selectedItem) {
+        medicineDetailsFragment.setMedicine(selectedItem == null ? null : (Medicine) selectedItem);
+        medicineDetailsFragment.updateView();
     }
 
     @Override
@@ -98,7 +115,7 @@ public class MedicineListFragment extends RoboListFragment {
 
         menu.setHeaderTitle(selectedMedicine.getName());
         menu.add(Menu.NONE, CONTEXT_MENU_EDIT, 0, edit);
-        menu.add(Menu.NONE, CONTEXT_MENU_DELETE, 0, delete);
+        menu.add(Menu.NONE, CONTEXT_MENU_DELETE, 1, delete);
     }
 
     @Override
@@ -109,7 +126,7 @@ public class MedicineListFragment extends RoboListFragment {
         switch (item.getItemId()) {
             case CONTEXT_MENU_EDIT:
                 Intent intent = new Intent(application, AddEditMedicineActivity.class);
-                intent.putExtra(KEY_MEDICINE_TO_BE_EDITED, selectedMedicine);
+                intent.putExtra(KEY_MEDICINE, selectedMedicine);
                 startActivity(intent);
                 return true;
             case CONTEXT_MENU_DELETE:
@@ -146,6 +163,26 @@ public class MedicineListFragment extends RoboListFragment {
         }
 
         return true;
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Medicine selectedMedicine = (Medicine) getListAdapter().getItem(position);
+
+        if (dualPane) {
+            getListView().setItemChecked(position, true);
+            updateDetailsFragment(selectedMedicine);
+        } else {
+            Intent intent = new Intent(application, MedicineDetailsActivity.class);
+            intent.putExtra(KEY_MEDICINE, selectedMedicine);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        DbHelper.release();
     }
 
 

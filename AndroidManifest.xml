@@ -33,6 +33,10 @@
                   android:label="@string/new_medicine"
                   android:windowSoftInputMode="stateHidden"
                   android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".activity.MedicineDetailsActivity"
+                  android:label="@string/medicine_details"
+                  android:windowSoftInputMode="stateHidden"
+                  android:configChanges="orientation|screenSize|keyboardHidden"/>
     </application>
 
 </manifest>

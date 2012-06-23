@@ -76,7 +76,7 @@ public class AddEditMedicineActivity extends RoboActivity {
         createAddMedicinePhotoDialog();
         setOnPhotoTakeListener();
         registerForContextMenu(takePhotoButton);
-        prepareMedicine(getIntent().getSerializableExtra(MedicineListFragment.KEY_MEDICINE_TO_BE_EDITED));
+        prepareMedicine(getIntent().getSerializableExtra(MedicineListFragment.KEY_MEDICINE));
     }
 
     private void prepareMedicine(Serializable medicineToBeEdited) {
