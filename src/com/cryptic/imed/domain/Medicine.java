@@ -1,6 +1,6 @@
 package com.cryptic.imed.domain;
 
-import com.cryptic.imed.utils.Filterable;
+import com.cryptic.imed.util.Filterable;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;

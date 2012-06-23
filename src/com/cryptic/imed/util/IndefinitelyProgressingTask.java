@@ -1,4 +1,4 @@
-package com.cryptic.imed.utils;
+package com.cryptic.imed.util;
 
 import android.app.ProgressDialog;
 import android.content.Context;
