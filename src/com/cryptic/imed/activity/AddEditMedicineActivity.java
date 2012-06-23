@@ -20,7 +20,7 @@ import com.cryptic.imed.fragment.MedicineListFragment;
 import com.cryptic.imed.photo.camera.CameraUnavailableException;
 import com.cryptic.imed.photo.camera.OnPhotoTakeListener;
 import com.cryptic.imed.photo.camera.PhotoTaker;
-import com.cryptic.imed.photo.utils.BitmapByteArrayConverter;
+import com.cryptic.imed.photo.util.BitmapByteArrayConverter;
 import com.cryptic.imed.util.StringUtils;
 import com.cryptic.imed.util.Validation;
 import com.google.inject.Inject;
