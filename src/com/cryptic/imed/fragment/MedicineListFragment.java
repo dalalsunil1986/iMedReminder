@@ -12,12 +12,15 @@ import com.cryptic.imed.R;
 import com.cryptic.imed.activity.NewMedicineActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.domain.Medicine;
+import com.cryptic.imed.utils.Filterable;
 import com.cryptic.imed.utils.FilterableArrayAdapter;
 import com.cryptic.imed.utils.StringUtils;
 import com.cryptic.imed.utils.TwoLineListItemWithImageView;
 import com.google.inject.Inject;
 import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectResource;
+
+import java.util.Comparator;
 
 /**
  * @author sharafat
@@ -86,6 +89,12 @@ public class MedicineListFragment extends RoboListFragment {
         MedicineListAdapter() {
             super(application, 0);
             addAll(DbHelper.getHelper().getRuntimeExceptionDao(Medicine.class).queryForAll());
+            sort(new Comparator<Filterable>() {
+                @Override
+                public int compare(Filterable lhs, Filterable rhs) {
+                    return ((Medicine) lhs).getName().compareTo(((Medicine) rhs).getName());
+                }
+            });
         }
 
         @Override
