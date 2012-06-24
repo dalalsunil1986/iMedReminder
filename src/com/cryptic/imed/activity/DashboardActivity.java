@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import com.cryptic.imed.R;
+import com.cryptic.imed.activity.medicine.MedicineListActivity;
 import com.cryptic.imed.util.IndefinitelyProgressingTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

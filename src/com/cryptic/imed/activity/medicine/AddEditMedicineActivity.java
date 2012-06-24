@@ -1,4 +1,4 @@
-package com.cryptic.imed.activity;
+package com.cryptic.imed.activity.medicine;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,10 +13,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import com.cryptic.imed.R;
+import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.domain.MedicationUnit;
 import com.cryptic.imed.domain.Medicine;
-import com.cryptic.imed.fragment.MedicineListFragment;
+import com.cryptic.imed.fragment.medicine.MedicineListFragment;
 import com.cryptic.imed.photo.camera.CameraUnavailableException;
 import com.cryptic.imed.photo.camera.OnPhotoTakeListener;
 import com.cryptic.imed.photo.camera.PhotoTaker;

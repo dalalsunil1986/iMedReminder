@@ -1,4 +1,4 @@
-package com.cryptic.imed.fragment;
+package com.cryptic.imed.fragment.medicine;
 
 import android.app.Application;
 import android.content.Intent;
@@ -7,9 +7,9 @@ import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.cryptic.imed.R;
-import com.cryptic.imed.activity.AddEditMedicineActivity;
+import com.cryptic.imed.activity.medicine.AddEditMedicineActivity;
 import com.cryptic.imed.activity.DashboardActivity;
-import com.cryptic.imed.activity.MedicineListActivity;
+import com.cryptic.imed.activity.medicine.MedicineListActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.domain.Medicine;
 import com.cryptic.imed.photo.util.BitmapByteArrayConverter;

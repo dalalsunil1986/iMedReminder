@@ -1,9 +1,9 @@
-package com.cryptic.imed.activity;
+package com.cryptic.imed.activity.medicine;
 
 import android.os.Bundle;
 import com.cryptic.imed.domain.Medicine;
-import com.cryptic.imed.fragment.MedicineDetailsFragment;
-import com.cryptic.imed.fragment.MedicineListFragment;
+import com.cryptic.imed.fragment.medicine.MedicineDetailsFragment;
+import com.cryptic.imed.fragment.medicine.MedicineListFragment;
 import com.google.inject.Inject;
 import roboguice.activity.RoboFragmentActivity;
 

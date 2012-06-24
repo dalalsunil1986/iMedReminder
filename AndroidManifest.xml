@@ -25,15 +25,15 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MedicineListActivity"
+        <activity android:name=".activity.medicine.MedicineListActivity"
                   android:label="@string/medicine_list"
                   android:windowSoftInputMode="stateHidden"
                   android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".activity.AddEditMedicineActivity"
+        <activity android:name=".activity.medicine.AddEditMedicineActivity"
                   android:label="@string/new_medicine"
                   android:windowSoftInputMode="stateHidden"
                   android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".activity.MedicineDetailsActivity"
+        <activity android:name=".activity.medicine.MedicineDetailsActivity"
                   android:label="@string/medicine_details"
                   android:windowSoftInputMode="stateHidden"
                   android:configChanges="orientation|screenSize|keyboardHidden"/>
