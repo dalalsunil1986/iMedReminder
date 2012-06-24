@@ -37,6 +37,18 @@
                   android:label="@string/medicine_details"
                   android:windowSoftInputMode="stateHidden"
                   android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".activity.doctor.DoctorListActivity"
+                  android:label="@string/doctor_list"
+                  android:windowSoftInputMode="stateHidden"
+                  android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".activity.doctor.DoctorDetailsActivity"
+                  android:label="@string/doctor_details"
+                  android:windowSoftInputMode="stateHidden"
+                  android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".activity.doctor.AddEditDoctorActivity"
+                  android:label="@string/new_doctor"
+                  android:windowSoftInputMode="stateHidden"
+                  android:configChanges="orientation|screenSize|keyboardHidden"/>
     </application>
 
 </manifest>

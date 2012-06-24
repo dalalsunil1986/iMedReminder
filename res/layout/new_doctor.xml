@@ -35,12 +35,12 @@
 
                     <TextView android:layout_width="fill_parent"
                               android:layout_height="wrap_content"
-                              android:text="@string/medicine_name"/>
+                              android:text="@string/doctor_name"/>
 
-                    <EditText android:id="@+id/med_name_input"
+                    <EditText android:id="@+id/doc_name_input"
                               android:layout_width="fill_parent"
                               android:layout_height="wrap_content"
-                              android:inputType="textCapSentences"/>
+                              android:inputType="textPersonName|textCapWords"/>
 
                 </LinearLayout>
 
@@ -48,32 +48,48 @@
 
             <TextView android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
-                      android:text="@string/details"/>
+                      android:text="@string/phone"/>
+
+            <EditText android:id="@+id/doc_phone_input"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:inputType="phone"/>
+
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="@string/address"/>
+
+            <EditText android:id="@+id/doc_address_input"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:inputType="textPostalAddress|textMultiLine|textCapSentences"/>
+
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="@string/email"/>
+
+            <EditText android:id="@+id/doc_email_input"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:inputType="textEmailAddress"/>
+
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="@string/website"/>
+
+            <EditText android:id="@+id/doc_website_input"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:inputType="textUri"/>
+
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="@string/notes"/>
 
             <EditText android:id="@+id/notes_input"
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
                       android:inputType="textMultiLine|textCapSentences"/>
-
-            <TextView android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:text="@string/current_stock"/>
-
-            <RelativeLayout android:layout_width="fill_parent"
-                            android:layout_height="wrap_content">
-
-                <Spinner android:id="@+id/medication_unit_spinner"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:layout_alignParentRight="true"/>
-
-                <EditText android:id="@+id/current_stock_input"
-                          android:layout_width="fill_parent"
-                          android:layout_height="wrap_content"
-                          android:inputType="numberDecimal"
-                          android:layout_toLeftOf="@id/medication_unit_spinner"/>
-
-            </RelativeLayout>
 
         </LinearLayout>
 

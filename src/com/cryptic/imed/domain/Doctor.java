@@ -1,14 +1,17 @@
 package com.cryptic.imed.domain;
 
+import com.cryptic.imed.util.Filterable;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import java.io.Serializable;
 
 /**
  * @author sharafat
  */
 @DatabaseTable
-public class Doctor {
+public class Doctor implements Filterable, Serializable {
     @DatabaseField(generatedId = true)
     private int id;
 
@@ -32,6 +35,9 @@ public class Doctor {
 
     @DatabaseField(dataType = DataType.BYTE_ARRAY)
     private byte[] photo;
+
+    @DatabaseField(canBeNull = false)
+    private boolean deleted;
 
     public int getId() {
         return id;
@@ -97,6 +103,14 @@ public class Doctor {
         this.photo = photo;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -123,6 +137,12 @@ public class Doctor {
                 ", website='" + website + '\'' +
                 ", notes='" + notes + '\'' +
                 ", photo=" + (photo != null ? photo.length : 0) + "bytes" +
+                ", deleted=" + deleted +
                 '}';
+    }
+
+    @Override
+    public String getFilterableText() {
+        return name;
     }
 }

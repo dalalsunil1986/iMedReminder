@@ -37,4 +37,22 @@
     <string name="add_medicine_photo">Add Medicine Photo</string>
     <string name="take_from_camera">Take From Camera</string>
     <string name="pick_from_gallery">Pick From Gallery</string>
+
+    <!-- Doctor List -->
+    <string name="doctor_list">Doctor List</string>
+    <string name="new_doctor">New Doctor</string>
+
+    <!-- Doctor Details-->
+    <string name="doctor_details">Doctor Details</string>
+
+    <!-- Add/Edit Doctor -->
+    <string name="doctor_name">Doctor Name</string>
+    <string name="phone">Phone</string>
+    <string name="address">Address</string>
+    <string name="email">Email</string>
+    <string name="website">Website</string>
+    <string name="notes">Notes</string>
+    <string name="add_doctor_photo">Add Doctor Photo</string>
+    <string name="invalid_email">Invalid Email Address</string>
+    <string name="invalid_url">Invalid Website URL</string>
 </resources>

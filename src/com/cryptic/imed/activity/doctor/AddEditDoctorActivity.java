@@ -1,4 +1,4 @@
-package com.cryptic.imed.activity.medicine;
+package com.cryptic.imed.activity.doctor;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -8,23 +8,19 @@ import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
-import com.cryptic.imed.domain.MedicationUnit;
-import com.cryptic.imed.domain.Medicine;
-import com.cryptic.imed.fragment.medicine.MedicineListFragment;
+import com.cryptic.imed.domain.Doctor;
+import com.cryptic.imed.fragment.doctor.DoctorListFragment;
 import com.cryptic.imed.photo.camera.CameraUnavailableException;
 import com.cryptic.imed.photo.camera.OnPhotoTakeListener;
 import com.cryptic.imed.photo.camera.PhotoTaker;
 import com.cryptic.imed.photo.util.BitmapByteArrayConverter;
 import com.cryptic.imed.util.CompatibilityUtils;
-import com.cryptic.imed.util.StringUtils;
 import com.cryptic.imed.util.Validation;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
@@ -38,61 +34,61 @@ import java.io.Serializable;
 /**
  * @author sharafat
  */
-@ContentView(R.layout.new_medicine)
-public class AddEditMedicineActivity extends RoboActivity {
-    private final RuntimeExceptionDao<Medicine, Integer> medicineDao;
+@ContentView(R.layout.new_doctor)
+public class AddEditDoctorActivity extends RoboActivity {
+    private final RuntimeExceptionDao<Doctor, Integer> doctorDao;
 
     @Inject
     private PhotoTaker photoTaker;
 
-    @InjectView(R.id.med_name_input)
-    private EditText medNameInput;
+    @InjectView(R.id.doc_name_input)
+    private EditText docNameInput;
+    @InjectView(R.id.doc_phone_input)
+    private EditText docPhoneInput;
+    @InjectView(R.id.doc_address_input)
+    private EditText docAddressInput;
+    @InjectView(R.id.doc_email_input)
+    private EditText docEmailInput;
+    @InjectView(R.id.doc_website_input)
+    private EditText docWebsiteInput;
+    @InjectView(R.id.notes_input)
+    private EditText notesInput;
     @InjectView(R.id.take_photo_btn)
     private ImageButton takePhotoButton;
-    @InjectView(R.id.notes_input)
-    private EditText detailsInput;
-    @InjectView(R.id.current_stock_input)
-    private EditText currentStockInput;
-    @InjectView(R.id.medication_unit_spinner)
-    private Spinner medicationUnitSpinner;
 
     @InjectResource(R.array.photo_taking_options)
     private String[] photoTakingOptions;
-    @InjectResource(R.string.add_medicine_photo)
-    private String addMedicinePhoto;
+    @InjectResource(R.string.add_doctor_photo)
+    private String addDoctorPhoto;
     @InjectResource(R.string.remove_photo)
     private String removePhoto;
     @InjectResource(R.string.required)
     private String required;
+    @InjectResource(R.string.invalid_email)
+    private String invalidEmailAddress;
+    @InjectResource(R.string.invalid_url)
+    private String invalidUrl;
 
-    private AlertDialog addMedicinePhotoDialog;
+    private AlertDialog addDoctorPhotoDialog;
     private OnPhotoTakeListener onPhotoTakeListener;
 
-    private Medicine medicine;
+    private Doctor doctor;
 
-    public AddEditMedicineActivity() {
-        medicineDao = DbHelper.getHelper().getRuntimeExceptionDao(Medicine.class);
+    public AddEditDoctorActivity() {
+        doctorDao = DbHelper.getHelper().getRuntimeExceptionDao(Doctor.class);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setMedicationUnitSpinnerAdapter();
         setPhotoTakerOptions();
-        createAddMedicinePhotoDialog();
+        createAddDoctorPhotoDialog();
         setOnPhotoTakeListener();
-        prepareMedicine(getIntent().getSerializableExtra(MedicineListFragment.KEY_MEDICINE));
         registerForContextMenu(takePhotoButton);
+        prepareDoctor(getIntent().getSerializableExtra(DoctorListFragment.KEY_DOCTOR));
 
         CompatibilityUtils.setHomeButtonEnabled(true, this);
-    }
-
-    private void setMedicationUnitSpinnerAdapter() {
-        ArrayAdapter<MedicationUnit> medicationUnitSpinnerAdapter =
-                new ArrayAdapter<MedicationUnit>(this, android.R.layout.simple_spinner_item, MedicationUnit.values());
-        medicationUnitSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        medicationUnitSpinner.setAdapter(medicationUnitSpinnerAdapter);
     }
 
     private void setPhotoTakerOptions() {
@@ -102,8 +98,8 @@ public class AddEditMedicineActivity extends RoboActivity {
         photoTaker.setImageHeightAfterCropping(Constants.PHOTO_SIZE);
     }
 
-    private void createAddMedicinePhotoDialog() {
-        addMedicinePhotoDialog = new AlertDialog.Builder(this).setTitle(addMedicinePhoto)
+    private void createAddDoctorPhotoDialog() {
+        addDoctorPhotoDialog = new AlertDialog.Builder(this).setTitle(addDoctorPhoto)
                 .setItems(photoTakingOptions, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int selectedOptionIndex) {
@@ -112,7 +108,7 @@ public class AddEditMedicineActivity extends RoboActivity {
                                 try {
                                     photoTaker.takePhotoFromCamera();
                                 } catch (CameraUnavailableException e) {
-                                    new AlertDialog.Builder(AddEditMedicineActivity.this)
+                                    new AlertDialog.Builder(AddEditDoctorActivity.this)
                                             .setMessage(R.string.camera_unavailable).create().show();
                                     takePhotoButton.setEnabled(false);
                                 }
@@ -130,40 +126,37 @@ public class AddEditMedicineActivity extends RoboActivity {
             @Override
             public void onPhotoTaken(Bitmap photo) {
                 if (photo != null) {
-                    medicine.setPhoto(BitmapByteArrayConverter.bitmap2ByteArray(photo));
+                    doctor.setPhoto(BitmapByteArrayConverter.bitmap2ByteArray(photo));
                     takePhotoButton.setImageBitmap(photo);
                 }
             }
         };
     }
 
-    private void prepareMedicine(Serializable medicineToBeEdited) {
-        if (medicineToBeEdited == null) {
-            medicine = new Medicine();
+    private void prepareDoctor(Serializable doctorToBeEdited) {
+        if (doctorToBeEdited == null) {
+            doctor = new Doctor();
         } else {
-            medicine = (Medicine) medicineToBeEdited;
-            updateViewWithMedicineDetails();
+            doctor = (Doctor) doctorToBeEdited;
+            updateViewWithDoctorDetails();
         }
     }
 
-    private void updateViewWithMedicineDetails() {
-        medNameInput.setText(medicine.getName());
-        detailsInput.setText(medicine.getDetails());
-        currentStockInput.setText(StringUtils.dropDecimalIfRoundNumber(medicine.getCurrentStock()));
-        for (int i = 0; i < medicationUnitSpinner.getAdapter().getCount(); i++) {
-            if (medicationUnitSpinner.getAdapter().getItem(i) == medicine.getMedicationUnit()) {
-                medicationUnitSpinner.setSelection(i);
-                break;
-            }
-        }
-        if (medicine.getPhoto() != null) {
-            takePhotoButton.setImageBitmap(BitmapByteArrayConverter.byteArray2Bitmap(medicine.getPhoto()));
+    private void updateViewWithDoctorDetails() {
+        docNameInput.setText(doctor.getName());
+        docPhoneInput.setText(doctor.getPhone());
+        docAddressInput.setText(doctor.getAddress());
+        docEmailInput.setText(doctor.getEmail());
+        docWebsiteInput.setText(doctor.getWebsite());
+        notesInput.setText(doctor.getNotes());
+        if (doctor.getPhoto() != null) {
+            takePhotoButton.setImageBitmap(BitmapByteArrayConverter.byteArray2Bitmap(doctor.getPhoto()));
         }
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if (v == takePhotoButton && medicine.getPhoto() != null) {
+        if (v == takePhotoButton && doctor.getPhoto() != null) {
             menu.add(removePhoto);
         }
     }
@@ -171,7 +164,7 @@ public class AddEditMedicineActivity extends RoboActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle().equals(removePhoto)) {
-            medicine.setPhoto(null);
+            doctor.setPhoto(null);
             takePhotoButton.setImageResource(R.drawable.take_photo);
             return true;
         }
@@ -196,39 +189,34 @@ public class AddEditMedicineActivity extends RoboActivity {
     }
 
     public void onTakePhotoButtonClicked(View view) {
-        addMedicinePhotoDialog.show();
+        addDoctorPhotoDialog.show();
     }
 
     public void onSaveButtonClicked(View view) {
-        if (!Validation.validateRequired(medNameInput, required)) {
+        if (!Validation.validateRequired(docNameInput, required)
+                | !Validation.validateEmail(docEmailInput, invalidEmailAddress)
+                | !Validation.validateUrl(docWebsiteInput, invalidUrl)) {
             return;
         }
 
-        saveMedicine();
+        saveDoctor();
 
-        startActivity(new Intent(this, MedicineListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        startActivity(new Intent(this, DoctorListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         finish();
     }
 
-    private void saveMedicine() {
-        medicine.setName(medNameInput.getText().toString());
-        medicine.setDetails(detailsInput.getText().toString());
-        medicine.setCurrentStock(getCurrentStockFromUserInput());
-        medicine.setMedicationUnit((MedicationUnit) medicationUnitSpinner.getSelectedItem());
+    private void saveDoctor() {
+        doctor.setName(docNameInput.getText().toString());
+        doctor.setPhone(docPhoneInput.getText().toString());
+        doctor.setAddress(docAddressInput.getText().toString());
+        doctor.setEmail(docEmailInput.getText().toString());
+        doctor.setWebsite(docWebsiteInput.getText().toString());
+        doctor.setNotes(notesInput.getText().toString());
 
-        if (medicine.getId() == 0) {
-            medicineDao.create(medicine);
+        if (doctor.getId() == 0) {
+            doctorDao.create(doctor);
         } else {
-            medicineDao.update(medicine);
-        }
-    }
-
-    private float getCurrentStockFromUserInput() {
-        String currentStock = currentStockInput.getText().toString();
-        if ("".equals(currentStock)) {  //user hasn't provided any input
-            return 0;
-        } else {
-            return Float.parseFloat(currentStock);
+            doctorDao.update(doctor);
         }
     }
 

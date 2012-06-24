@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import com.cryptic.imed.R;
 import com.cryptic.imed.activity.medicine.AddEditMedicineActivity;
@@ -31,6 +32,8 @@ public class MedicineDetailsFragment extends RoboFragment {
     @Inject
     private Application application;
 
+    @InjectView(R.id.medicine_details_view)
+    private ScrollView medicineDetailsView;
     @InjectView(R.id.med_name)
     private TextView medNameTextView;
     @InjectView(R.id.med_details)
@@ -39,10 +42,6 @@ public class MedicineDetailsFragment extends RoboFragment {
     private TextView currentStockTextView;
     @InjectView(R.id.med_photo)
     private ImageView medPhotoImageView;
-    @InjectView(R.id.details_heading)
-    private TextView detailsHeading;
-    @InjectView(R.id.current_stock_heading)
-    private TextView currentStockHeading;
 
     @InjectResource(R.string.x_units_available)
     private String xUnitsAvailable;
@@ -89,11 +88,11 @@ public class MedicineDetailsFragment extends RoboFragment {
                     StringUtils.dropDecimalIfRoundNumber(medicine.getCurrentStock()), medicine.getMedicationUnit()));
             if (medicine.getPhoto() != null) {
                 medPhotoImageView.setImageBitmap(BitmapByteArrayConverter.byteArray2Bitmap(medicine.getPhoto()));
+            } else {
+                medPhotoImageView.setImageDrawable(null);
             }
 
-            detailsHeading.setVisibility(View.VISIBLE);
-            currentStockHeading.setVisibility(View.VISIBLE);
-
+            medicineDetailsView.setVisibility(View.VISIBLE);
             setHasOptionsMenu(true);
         } else {
             medNameTextView.setText("");
@@ -101,9 +100,7 @@ public class MedicineDetailsFragment extends RoboFragment {
             currentStockTextView.setText("");
             medPhotoImageView.setImageDrawable(null);
 
-            detailsHeading.setVisibility(View.GONE);
-            currentStockHeading.setVisibility(View.GONE);
-
+            medicineDetailsView.setVisibility(View.GONE);
             setHasOptionsMenu(false);
         }
     }
