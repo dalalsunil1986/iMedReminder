@@ -144,7 +144,7 @@ public class AddEditMedicineActivity extends RoboActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 MedicineType medicineType = ((MedicineTypeListAdapter) parent.getAdapter()).getItem(position);
 
-                medicine.setPhoto(ImageUtils.drawable2ByteArray(medicineType.getIcon()));
+                medicine.setPhoto(ImageUtils.getByteArray(medicineType.getIcon()));
                 takePhotoButton.setImageDrawable(medicineType.getIcon());
 
                 pickMedicinePhotoFromStockDialog.hide();
@@ -165,7 +165,7 @@ public class AddEditMedicineActivity extends RoboActivity {
             @Override
             public void onPhotoTaken(Bitmap photo) {
                 if (photo != null) {
-                    medicine.setPhoto(ImageUtils.bitmap2ByteArray(photo));
+                    medicine.setPhoto(ImageUtils.getByteArray(photo));
                     takePhotoButton.setImageBitmap(photo);
                 }
             }
@@ -192,7 +192,7 @@ public class AddEditMedicineActivity extends RoboActivity {
             }
         }
         if (medicine.getPhoto() != null) {
-            takePhotoButton.setImageBitmap(ImageUtils.byteArray2Bitmap(medicine.getPhoto()));
+            takePhotoButton.setImageBitmap(ImageUtils.getBitmap(medicine.getPhoto()));
         }
     }
 

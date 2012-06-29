@@ -93,7 +93,7 @@ public class DoctorDetailsFragment extends RoboFragment {
             docWebsiteTextView.setText(StringUtils.getNonEmptyString(doctor.getWebsite(), notAvailable));
             notesTextView.setText(StringUtils.getNonEmptyString(doctor.getNotes(), notAvailable));
             if (doctor.getPhoto() != null) {
-                docPhotoImageView.setImageBitmap(ImageUtils.byteArray2Bitmap(doctor.getPhoto()));
+                docPhotoImageView.setImageBitmap(ImageUtils.getBitmap(doctor.getPhoto()));
             } else {
                 docPhotoImageView.setImageResource(R.drawable.ic_default_photo);
             }

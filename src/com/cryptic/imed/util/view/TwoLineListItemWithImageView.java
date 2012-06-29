@@ -33,7 +33,7 @@ public class TwoLineListItemWithImageView {
     public static View getView(LayoutInflater layoutInflater, View convertView, ViewGroup parent,
                                String primaryText, String secondaryText, byte[] image) {
         return getView(layoutInflater, convertView, parent, primaryText, secondaryText,
-                image == null ? null : ImageUtils.byteArray2Bitmap(image));
+                image == null ? null : ImageUtils.getBitmap(image));
     }
 
     public static View getView(LayoutInflater layoutInflater, View convertView, ViewGroup parent,

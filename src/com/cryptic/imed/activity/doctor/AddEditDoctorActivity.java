@@ -126,7 +126,7 @@ public class AddEditDoctorActivity extends RoboActivity {
             @Override
             public void onPhotoTaken(Bitmap photo) {
                 if (photo != null) {
-                    doctor.setPhoto(ImageUtils.bitmap2ByteArray(photo));
+                    doctor.setPhoto(ImageUtils.getByteArray(photo));
                     takePhotoButton.setImageBitmap(photo);
                 }
             }
@@ -150,7 +150,7 @@ public class AddEditDoctorActivity extends RoboActivity {
         docWebsiteInput.setText(doctor.getWebsite());
         notesInput.setText(doctor.getNotes());
         if (doctor.getPhoto() != null) {
-            takePhotoButton.setImageBitmap(ImageUtils.byteArray2Bitmap(doctor.getPhoto()));
+            takePhotoButton.setImageBitmap(ImageUtils.getBitmap(doctor.getPhoto()));
         }
     }
 

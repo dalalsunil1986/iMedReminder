@@ -246,7 +246,7 @@ public class DoctorListFragment extends RoboListFragment {
             Doctor doctor = (Doctor) getItem(position);
             return TwoLineListItemWithImageView.getView(layoutInflater, convertView, parent,
                     doctor.getName(), doctor.getAddress(),
-                    doctor.getPhoto() != null ? doctor.getPhoto() : ImageUtils.bitmap2ByteArray(
+                    doctor.getPhoto() != null ? doctor.getPhoto() : ImageUtils.getByteArray(
                             BitmapFactory.decodeResource(getResources(), R.drawable.ic_default_photo)));
         }
     }
