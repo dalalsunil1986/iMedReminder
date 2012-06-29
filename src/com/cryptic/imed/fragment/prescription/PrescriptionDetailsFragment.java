@@ -2,6 +2,7 @@ package com.cryptic.imed.fragment.prescription;
 
 import android.app.Application;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.*;
@@ -17,6 +18,7 @@ import com.cryptic.imed.common.Constants;
 import com.cryptic.imed.domain.Doctor;
 import com.cryptic.imed.domain.Prescription;
 import com.cryptic.imed.domain.PrescriptionMedicine;
+import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.DualPaneUtils;
 import com.cryptic.imed.util.view.TwoLineListItemWithImageView;
@@ -64,6 +66,8 @@ public class PrescriptionDetailsFragment extends RoboFragment {
     private String everyday;
     @InjectResource(R.string.every_x_days)
     private String everyXDays;
+    @InjectResource(R.drawable.ic_default_med)
+    private Drawable defaultMedicinePhoto;
 
     private boolean dualPanel;
     private PrescriptionListFragment prescriptionListFragment;
@@ -130,7 +134,7 @@ public class PrescriptionDetailsFragment extends RoboFragment {
                                             ? everyday
                                             : String.format(everyXDays, prescriptionMedicine.getDayInterval()),
                                     DateFormat.format(Constants.GENERAL_DATE_FORMAT, prescriptionMedicine.getStartDate())),
-                            prescriptionMedicine.getMedicine().getPhoto()));
+                            ImageUtils.getNonEmptyImage(prescriptionMedicine.getMedicine().getPhoto(), defaultMedicinePhoto)));
                 }
 
                 medicineListSection.setVisibility(View.VISIBLE);

@@ -2,6 +2,7 @@ package com.cryptic.imed.activity.prescription;
 
 import android.app.Application;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.*;
@@ -73,6 +74,8 @@ public class AddEditPrescriptionActivity extends RoboActivity {
     private String everyday;
     @InjectResource(R.string.every_x_days)
     private String everyXDays;
+    @InjectResource(R.drawable.ic_default_med)
+    private Drawable defaultMedicinePhoto;
 
     private Prescription prescription;
 
@@ -250,11 +253,7 @@ public class AddEditPrescriptionActivity extends RoboActivity {
             final PrescriptionMedicine prescriptionMedicine = getItem(position);
 
             byte[] medicinePhoto = prescriptionMedicine.getMedicine().getPhoto();
-            if (medicinePhoto != null) {
-                imageView.setImageBitmap(ImageUtils.byteArray2Bitmap(medicinePhoto));
-            } else {
-                imageView.setImageDrawable(null);
-            }
+            imageView.setImageBitmap(ImageUtils.getNonEmptyImage(medicinePhoto, defaultMedicinePhoto));
 
             primaryText.setText(prescriptionMedicine.getMedicine().getName());
 

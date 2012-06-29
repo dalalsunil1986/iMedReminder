@@ -30,4 +30,39 @@ public class ImageUtils {
         return ((BitmapDrawable) drawable).getBitmap();
     }
 
+    public static Bitmap getNonEmptyImage(Bitmap image, Bitmap defaultImage) {
+        return image != null? image : defaultImage;
+    }
+
+    public static Bitmap getNonEmptyImage(Bitmap image, byte[] defaultImage) {
+        return image != null? image : byteArray2Bitmap(defaultImage);
+    }
+
+    public static Bitmap getNonEmptyImage(Bitmap image, Drawable defaultImage) {
+        return image != null? image : drawable2Bitmap(defaultImage);
+    }
+
+    public static Bitmap getNonEmptyImage(byte[] image, byte[] defaultImage) {
+        return image != null? byteArray2Bitmap(image) : byteArray2Bitmap(defaultImage);
+    }
+
+    public static Bitmap getNonEmptyImage(byte[] image, Bitmap defaultImage) {
+        return image != null? byteArray2Bitmap(image) : defaultImage;
+    }
+
+    public static Bitmap getNonEmptyImage(byte[] image, Drawable defaultImage) {
+        return image != null? byteArray2Bitmap(image) : drawable2Bitmap(defaultImage);
+    }
+
+    public static Bitmap getNonEmptyImage(Drawable image, Drawable defaultImage) {
+        return image != null? drawable2Bitmap(image) : drawable2Bitmap(defaultImage);
+    }
+
+    public static Bitmap getNonEmptyImage(Drawable image, byte[] defaultImage) {
+        return image != null? drawable2Bitmap(image) : byteArray2Bitmap(defaultImage);
+    }
+
+    public static Bitmap getNonEmptyImage(Drawable image, Bitmap defaultImage) {
+        return image != null? drawable2Bitmap(image) : defaultImage;
+    }
 }

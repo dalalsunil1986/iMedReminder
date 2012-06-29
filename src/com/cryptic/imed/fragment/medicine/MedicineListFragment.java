@@ -2,6 +2,7 @@ package com.cryptic.imed.fragment.medicine;
 
 import android.app.Application;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,9 +19,10 @@ import com.cryptic.imed.activity.medicine.MedicineListActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
 import com.cryptic.imed.domain.Medicine;
-import com.cryptic.imed.util.*;
+import com.cryptic.imed.util.StringUtils;
 import com.cryptic.imed.util.adapter.Filterable;
 import com.cryptic.imed.util.adapter.FilterableArrayAdapter;
+import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.DualPaneUtils;
 import com.cryptic.imed.util.view.TwoLineListItemWithImageView;
@@ -50,6 +52,8 @@ public class MedicineListFragment extends RoboListFragment {
     private String edit;
     @InjectResource(R.string.delete)
     private String delete;
+    @InjectResource(R.drawable.ic_default_med)
+    private Drawable defaultMedicinePhoto;
 
     private boolean dualPane;
     private MedicineDetailsFragment medicineDetailsFragment;
@@ -247,7 +251,8 @@ public class MedicineListFragment extends RoboListFragment {
             Medicine medicine = (Medicine) getItem(position);
             return TwoLineListItemWithImageView.getView(layoutInflater, convertView, parent, medicine.getName(),
                     String.format(xUnitsAvailable, StringUtils.dropDecimalIfRoundNumber(medicine.getCurrentStock()),
-                            medicine.getMedicationUnit()), medicine.getPhoto());
+                            medicine.getMedicationUnit()),
+                    ImageUtils.getNonEmptyImage(medicine.getPhoto(), defaultMedicinePhoto));
         }
     }
 }

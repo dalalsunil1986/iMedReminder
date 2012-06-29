@@ -2,21 +2,22 @@ package com.cryptic.imed.fragment.medicine;
 
 import android.app.Application;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import com.cryptic.imed.R;
-import com.cryptic.imed.activity.medicine.AddEditMedicineActivity;
 import com.cryptic.imed.activity.DashboardActivity;
+import com.cryptic.imed.activity.medicine.AddEditMedicineActivity;
 import com.cryptic.imed.activity.medicine.MedicineListActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.domain.Medicine;
+import com.cryptic.imed.util.StringUtils;
 import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.DualPaneUtils;
-import com.cryptic.imed.util.StringUtils;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboFragment;
@@ -47,6 +48,8 @@ public class MedicineDetailsFragment extends RoboFragment {
     private String xUnitsAvailable;
     @InjectResource(R.string.not_available)
     private String notAvailable;
+    @InjectResource(R.drawable.ic_default_med)
+    private Drawable defaultMedicinePhoto;
 
     private boolean dualPanel;
     private MedicineListFragment medicineListFragment;
@@ -86,20 +89,11 @@ public class MedicineDetailsFragment extends RoboFragment {
             medDetailsTextView.setText(StringUtils.getNonEmptyString(medicine.getDetails(), notAvailable));
             currentStockTextView.setText(String.format(xUnitsAvailable,
                     StringUtils.dropDecimalIfRoundNumber(medicine.getCurrentStock()), medicine.getMedicationUnit()));
-            if (medicine.getPhoto() != null) {
-                medPhotoImageView.setImageBitmap(ImageUtils.byteArray2Bitmap(medicine.getPhoto()));
-            } else {
-                medPhotoImageView.setImageDrawable(null);
-            }
+            medPhotoImageView.setImageBitmap(ImageUtils.getNonEmptyImage(medicine.getPhoto(), defaultMedicinePhoto));
 
             medicineDetailsView.setVisibility(View.VISIBLE);
             setHasOptionsMenu(true);
         } else {
-            medNameTextView.setText("");
-            medDetailsTextView.setText("");
-            currentStockTextView.setText("");
-            medPhotoImageView.setImageDrawable(null);
-
             medicineDetailsView.setVisibility(View.GONE);
             setHasOptionsMenu(false);
         }
