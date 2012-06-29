@@ -4,6 +4,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
@@ -11,11 +12,12 @@ import java.util.Date;
  * @author sharafat
  */
 @DatabaseTable
-public class PrescriptionMedicine {
+public class PrescriptionMedicine implements Serializable {
     @DatabaseField(generatedId = true)
     private int id;
 
-    @DatabaseField(canBeNull = false, foreign = true, index = true)
+    @DatabaseField(canBeNull = false, foreign = true, index = true,
+            columnDefinition = "integer references prescription(id) on delete cascade")
     private Prescription prescription;
 
     @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true, foreignAutoCreate = true)
@@ -25,7 +27,7 @@ public class PrescriptionMedicine {
     private Date startDate;
 
     @DatabaseField(canBeNull = false)
-    private float dosesToTake;
+    private int dosesToTake;
 
     @DatabaseField(canBeNull = false)
     private int dayInterval;
@@ -34,7 +36,7 @@ public class PrescriptionMedicine {
     private int totalDaysToTake;
 
     @ForeignCollectionField(orderColumnName = "doseNo")
-    private Collection<Dosage> dosageDetails;
+    private Collection<Dosage> dosageReminders;
 
     public int getId() {
         return id;
@@ -68,11 +70,11 @@ public class PrescriptionMedicine {
         this.startDate = startDate;
     }
 
-    public float getDosesToTake() {
+    public int getDosesToTake() {
         return dosesToTake;
     }
 
-    public void setDosesToTake(float dosesToTake) {
+    public void setDosesToTake(int dosesToTake) {
         this.dosesToTake = dosesToTake;
     }
 
@@ -92,12 +94,12 @@ public class PrescriptionMedicine {
         this.totalDaysToTake = totalDaysToTake;
     }
 
-    public Collection<Dosage> getDosageDetails() {
-        return dosageDetails;
+    public Collection<Dosage> getDosageReminders() {
+        return dosageReminders;
     }
 
-    public void setDosageDetails(Collection<Dosage> dosageDetails) {
-        this.dosageDetails = dosageDetails;
+    public void setDosageReminders(Collection<Dosage> dosageReminders) {
+        this.dosageReminders = dosageReminders;
     }
 
     @Override
@@ -119,13 +121,13 @@ public class PrescriptionMedicine {
     public String toString() {
         return "PrescriptionMedicine{" +
                 "id=" + id +
-                ", prescription=" + prescription +
+                ", prescriptionId=" + (prescription != null ? prescription.getId() : null) +
                 ", medicine=" + medicine +
                 ", startDate=" + startDate +
                 ", dosesToTake=" + dosesToTake +
                 ", dayInterval=" + dayInterval +
                 ", totalDaysToTake=" + totalDaysToTake +
-                ", dosageDetails=" + dosageDetails +
+                ", dosageReminders=" + dosageReminders +
                 '}';
     }
 }

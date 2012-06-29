@@ -10,6 +10,8 @@ import roboguice.activity.RoboFragmentActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
+import javax.annotation.Nullable;
+
 /**
  * @author sharafat
  */
@@ -19,6 +21,7 @@ public class MedicineListActivity extends RoboFragmentActivity {
     public static final String TAG_MEDICINE_DETAILS_FRAGMENT = "medicineDetailsFragment";
 
     @InjectView(R.id.details_container)
+    @Nullable
     private LinearLayout detailsContainer;
 
     public void onCreate(Bundle savedInstanceState) {

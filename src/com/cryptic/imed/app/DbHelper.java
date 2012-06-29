@@ -1,13 +1,9 @@
 package com.cryptic.imed.app;
 
-import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import com.cryptic.imed.R;
 import com.cryptic.imed.domain.*;
-import com.google.inject.Inject;
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import org.slf4j.Logger;
@@ -21,22 +17,11 @@ import java.sql.SQLException;
  * Note: To enable all debug messages for all ORMLite classes, use the following command:
  *          adb shell setprop log.tag.ORMLite DEBUG
  */
-public class DbHelper extends OrmLiteSqliteOpenHelper {
+public class DbHelper extends AbstractDbHelper {
     private static final Logger log = LoggerFactory.getLogger(DbHelper.class);
 
     private static final String DB_NAME = "imedreminder.db";
     private static final int DB_VERSION = 1;
-
-    @Inject
-    private static Application application;
-
-    public static OrmLiteSqliteOpenHelper getHelper() {
-        return OpenHelperManager.getHelper(application, DbHelper.class);
-    }
-
-    public static void release() {
-        OpenHelperManager.releaseHelper();
-    }
 
     public DbHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION, R.raw.ormlite_config);

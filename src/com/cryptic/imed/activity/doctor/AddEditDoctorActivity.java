@@ -165,7 +165,7 @@ public class AddEditDoctorActivity extends RoboActivity {
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle().equals(removePhoto)) {
             doctor.setPhoto(null);
-            takePhotoButton.setImageResource(R.drawable.take_photo);
+            takePhotoButton.setImageResource(R.drawable.btn_take_photo);
             return true;
         }
 

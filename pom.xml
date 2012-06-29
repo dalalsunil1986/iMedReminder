@@ -8,6 +8,7 @@
 
     <properties>
         <roboguice.version>2.0</roboguice.version>
+        <jsr305.version>2.0.0</jsr305.version>
         <slf4j.android.version>1.6.1-RC1</slf4j.android.version>
         <android.support-v4.version>r7</android.support-v4.version>
         <ormlite.version>4.40</ormlite.version>
@@ -18,6 +19,13 @@
             <groupId>org.roboguice</groupId>
             <artifactId>roboguice</artifactId>
             <version>${roboguice.version}</version>
+        </dependency>
+
+        <!-- For the @Nullable annotation -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>${jsr305.version}</version>
         </dependency>
 
         <dependency>

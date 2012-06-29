@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- General/Common Strings -->
     <string name="app_name">iMedReminder</string>
     <string name="type_to_filter">Type to filter…</string>
     <string name="list_empty">The list is empty. Please use the menu to add items.</string>
@@ -55,4 +56,38 @@
     <string name="add_doctor_photo">Add Doctor Photo</string>
     <string name="invalid_email">Invalid Email Address</string>
     <string name="invalid_url">Invalid Website URL</string>
+
+    <!-- Prescription List -->
+    <string name="prescription_list">Prescription List</string>
+    <string name="new_prescription">New Prescription</string>
+    <string name="added_on">Added on %s</string>
+
+    <!-- Prescription Details-->
+    <string name="prescription_details">Prescription Details</string>
+    <string name="issue_date">Issue Date</string>
+
+    <!-- Add/Edit Prescription -->
+    <string name="title">Title</string>
+    <string name="prescribed_by">Prescribed By</string>
+    <string name="tap_to_select_doctor">Tap to Select Doctor</string>
+    <string name="add_medicine">Add Medicine</string>
+    <string name="remove">Remove</string>
+    <string name="pick_doctor">Pick Doctor</string>
+    <string name="add_medicine_to_prescription">Add Medicine to Prescription</string>
+    <string name="medicine_list_item_details">For %1$d days with %2$d dose(s) %3$s starting from %4$s</string>
+    <string name="everyday">everyday</string>
+    <string name="every_x_days">every %d day(s)</string>
+
+    <!-- Medicine Schedule Activity -->
+    <string name="medicine_schedule">Medicine Schedule</string>
+    <string name="start_from">Start from</string>
+    <string name="take">Take</string>
+    <string name="doses_every">dose(s) every</string>
+    <string name="days">day(s)</string>
+    <string name="for_a_total_of">for a total of</string>
+    <string name="sentence_terminator">.</string>
+    <string name="units_at">%s(s) at</string>
+    <string name="dose_no">Dose %d</string>
+    <string name="must_be_greater_than_zero">Must be greater than 0</string>
+    <string name="add_reminder_times">Add Reminder Times</string>
 </resources>

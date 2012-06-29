@@ -1,5 +1,5 @@
 #
-# generated on 2012/06/24 04:15:47
+# generated on 2012/06/28 09:10:47
 #
 # --table-start--
 dataClass=com.cryptic.imed.domain.Doctor
@@ -44,10 +44,15 @@ dataClass=com.cryptic.imed.domain.Dosage
 tableName=dosage
 # --table-fields-start--
 # --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
 fieldName=prescriptionMedicine
 canBeNull=false
 foreign=true
 indexName=dosage_prescriptionMedicine_idx
+columnDefinition=integer references prescriptionmedicine(id) on delete cascade
 # --field-end--
 # --field-start--
 fieldName=doseNo
@@ -120,6 +125,7 @@ canBeNull=false
 # --field-start--
 fieldName=prescribedBy
 foreign=true
+foreignAutoCreate=true
 # --field-end--
 # --field-start--
 fieldName=medicines
@@ -141,6 +147,7 @@ fieldName=prescription
 canBeNull=false
 foreign=true
 indexName=prescriptionmedicine_prescription_idx
+columnDefinition=integer references prescription(id) on delete cascade
 # --field-end--
 # --field-start--
 fieldName=medicine
@@ -166,7 +173,7 @@ fieldName=totalDaysToTake
 canBeNull=false
 # --field-end--
 # --field-start--
-fieldName=dosageDetails
+fieldName=dosageReminders
 foreignCollection=true
 foreignCollectionOrderColumnName=doseNo
 # --field-end--
