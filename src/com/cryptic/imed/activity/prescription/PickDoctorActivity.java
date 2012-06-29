@@ -3,7 +3,6 @@ package com.cryptic.imed.activity.prescription;
 import android.app.Application;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +13,10 @@ import android.widget.ListView;
 import com.cryptic.imed.R;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.domain.Doctor;
-import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.adapter.Filterable;
 import com.cryptic.imed.util.adapter.FilterableArrayAdapter;
+import com.cryptic.imed.util.adapter.TextWatcherAdapter;
+import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.TwoLineListItemWithImageView;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
@@ -61,17 +61,7 @@ public class PickDoctorActivity extends RoboActivity {
             }
         });
 
-        filterInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //ignore
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //ignore
-            }
-
+        filterInput.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void afterTextChanged(Editable s) {
                 ((DoctorListAdapter) listView.getAdapter()).getFilter().filter(s);

@@ -129,40 +129,16 @@ public class MedicineScheduleActivity extends RoboActivity {
     }
 
     private void storeUserInputs() {
-        storeNoOfDoses();
-        storeDayInterval();
-        storeTotalDaysToTake();
+        prescriptionMedicine.setDosesToTake(StringUtils.parseInt(noOfDosesInput));
+        prescriptionMedicine.setDayInterval(StringUtils.parseInt(dayIntervalInput));
+        prescriptionMedicine.setTotalDaysToTake(StringUtils.parseInt(noOfDaysInput));
         storeDosageQuantity();
-    }
-
-    private void storeNoOfDoses() {
-        String noOfDosesText = noOfDosesInput.getText().toString();
-        if (!"".equals(noOfDosesText)) {
-            prescriptionMedicine.setDosesToTake(Integer.parseInt(noOfDosesText));
-        }
-    }
-
-    private void storeDayInterval() {
-        String dayIntervalText = dayIntervalInput.getText().toString();
-        if (!"".equals(dayIntervalText)) {
-            prescriptionMedicine.setDayInterval(Integer.parseInt(dayIntervalText));
-        }
-    }
-
-    private void storeTotalDaysToTake() {
-        String totalDaysToTakeText = noOfDaysInput.getText().toString();
-        if (!"".equals(totalDaysToTakeText)) {
-            prescriptionMedicine.setTotalDaysToTake(Integer.parseInt(totalDaysToTakeText));
-        }
     }
 
     private void storeDosageQuantity() {
         for (int i = 0; i < listView.getAdapter().getCount(); i++) {
             EditText quantityInput = (EditText) listView.getChildAt(i).findViewById(R.id.quantity_input);
-            String quantityInputText = quantityInput.getText().toString();
-            if (!"".equals(quantityInputText)) {
-                ((Dosage) listView.getAdapter().getItem(i)).setQuantity(Float.parseFloat(quantityInputText));
-            }
+            ((Dosage) listView.getAdapter().getItem(i)).setQuantity(StringUtils.parseFloat(quantityInput));
         }
     }
 

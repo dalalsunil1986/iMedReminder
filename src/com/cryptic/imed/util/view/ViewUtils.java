@@ -1,9 +1,14 @@
 package com.cryptic.imed.util.view;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import com.cryptic.imed.R;
 
 public class ViewUtils {
     /**
@@ -30,5 +35,18 @@ public class ViewUtils {
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
         listView.requestLayout();
+    }
+
+    public static void addListFragmentToLayout(FragmentActivity fragmentActivity, LinearLayout detailsContainer,
+                                               Fragment listFragment, Fragment detailsFragment) {
+        FragmentTransaction fragmentTransaction = fragmentActivity.getSupportFragmentManager().beginTransaction();
+
+        if (detailsContainer != null) {     //dual pane
+            fragmentTransaction.add(R.id.details_container, detailsFragment);
+        }
+
+        fragmentTransaction.add(R.id.list_container, listFragment);
+
+        fragmentTransaction.commit();
     }
 }
