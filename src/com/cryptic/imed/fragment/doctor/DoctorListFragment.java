@@ -14,7 +14,6 @@ import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.activity.doctor.AddEditDoctorActivity;
 import com.cryptic.imed.activity.doctor.DoctorDetailsActivity;
-import com.cryptic.imed.activity.doctor.DoctorListActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
 import com.cryptic.imed.domain.Doctor;
@@ -28,8 +27,10 @@ import com.cryptic.imed.util.view.TwoLineListItemWithImageView;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboListFragment;
+import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectResource;
 
+import javax.annotation.Nullable;
 import java.util.Comparator;
 
 /**
@@ -45,6 +46,10 @@ public class DoctorListFragment extends RoboListFragment {
     @Inject
     private LayoutInflater layoutInflater;
 
+    @InjectFragment(R.id.details_container)
+    @Nullable
+    private DoctorDetailsFragment doctorDetailsFragment;
+
     @InjectResource(R.string.edit)
     private String edit;
     @InjectResource(R.string.delete)
@@ -53,7 +58,6 @@ public class DoctorListFragment extends RoboListFragment {
     private Drawable defaultPhoto;
 
     private boolean dualPane;
-    private DoctorDetailsFragment doctorDetailsFragment;
 
     public DoctorListFragment() {
         doctorDao = DbHelper.getHelper().getRuntimeExceptionDao(Doctor.class);
@@ -87,8 +91,6 @@ public class DoctorListFragment extends RoboListFragment {
 
         dualPane = DualPaneUtils.isDualPane(getActivity(), R.id.details_container);
         if (dualPane) {
-            doctorDetailsFragment = (DoctorDetailsFragment)
-                    getFragmentManager().findFragmentByTag(DoctorListActivity.TAG_DOCTOR_DETAILS_FRAGMENT);
             selectFirstItemInList();
         }
     }
@@ -113,6 +115,7 @@ public class DoctorListFragment extends RoboListFragment {
     }
 
     private void updateDetailsFragment(Object selectedItem) {
+        assert doctorDetailsFragment != null;
         doctorDetailsFragment.setDoctor(selectedItem == null ? null : (Doctor) selectedItem);
         doctorDetailsFragment.updateView();
     }

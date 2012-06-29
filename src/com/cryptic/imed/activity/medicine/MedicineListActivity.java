@@ -17,9 +17,6 @@ import javax.annotation.Nullable;
  */
 @ContentView(R.layout.list)
 public class MedicineListActivity extends RoboFragmentActivity {
-    public static final String TAG_MEDICINE_LIST_FRAGMENT = "medicineListFragment";
-    public static final String TAG_MEDICINE_DETAILS_FRAGMENT = "medicineDetailsFragment";
-
     @InjectView(R.id.details_container)
     @Nullable
     private LinearLayout detailsContainer;
@@ -34,11 +31,11 @@ public class MedicineListActivity extends RoboFragmentActivity {
 
         if (detailsContainer != null) {     //dual pane
             MedicineDetailsFragment medicineDetailsFragment = new MedicineDetailsFragment();
-            fragmentTransaction.add(R.id.details_container, medicineDetailsFragment, TAG_MEDICINE_DETAILS_FRAGMENT);
+            fragmentTransaction.add(R.id.details_container, medicineDetailsFragment);
         }
 
         MedicineListFragment medicineListFragment = new MedicineListFragment();
-        fragmentTransaction.add(R.id.list_container, medicineListFragment, TAG_MEDICINE_LIST_FRAGMENT);
+        fragmentTransaction.add(R.id.list_container, medicineListFragment);
 
         fragmentTransaction.commit();
     }

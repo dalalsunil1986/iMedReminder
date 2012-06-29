@@ -12,7 +12,6 @@ import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.activity.prescription.AddEditPrescriptionActivity;
 import com.cryptic.imed.activity.prescription.PrescriptionDetailsActivity;
-import com.cryptic.imed.activity.prescription.PrescriptionListActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
 import com.cryptic.imed.domain.Prescription;
@@ -24,8 +23,10 @@ import com.cryptic.imed.util.view.DualPaneUtils;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboListFragment;
+import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectResource;
 
+import javax.annotation.Nullable;
 import java.util.Comparator;
 
 /**
@@ -41,6 +42,10 @@ public class PrescriptionListFragment extends RoboListFragment {
     @Inject
     private LayoutInflater layoutInflater;
 
+    @InjectFragment(R.id.details_container)
+    @Nullable
+    private PrescriptionDetailsFragment prescriptionDetailsFragment;
+
     @InjectResource(R.string.edit)
     private String edit;
     @InjectResource(R.string.delete)
@@ -49,7 +54,6 @@ public class PrescriptionListFragment extends RoboListFragment {
     private String addedOn;
 
     private boolean dualPane;
-    private PrescriptionDetailsFragment prescriptionDetailsFragment;
 
     public PrescriptionListFragment() {
         prescriptionDao = DbHelper.getHelper().getRuntimeExceptionDao(Prescription.class);
@@ -83,8 +87,6 @@ public class PrescriptionListFragment extends RoboListFragment {
 
         dualPane = DualPaneUtils.isDualPane(getActivity(), R.id.details_container);
         if (dualPane) {
-            prescriptionDetailsFragment = (PrescriptionDetailsFragment)
-                    getFragmentManager().findFragmentByTag(PrescriptionListActivity.TAG_PRESCRIPTION_DETAILS_FRAGMENT);
             selectFirstItemInList();
         }
     }
@@ -109,6 +111,7 @@ public class PrescriptionListFragment extends RoboListFragment {
     }
 
     private void updateDetailsFragment(Object selectedItem) {
+        assert prescriptionDetailsFragment != null;
         prescriptionDetailsFragment.setPrescription(selectedItem == null ? null : (Prescription) selectedItem);
         prescriptionDetailsFragment.updateView();
     }

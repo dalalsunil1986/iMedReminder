@@ -15,7 +15,6 @@ import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.activity.medicine.AddEditMedicineActivity;
 import com.cryptic.imed.activity.medicine.MedicineDetailsActivity;
-import com.cryptic.imed.activity.medicine.MedicineListActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
 import com.cryptic.imed.domain.Medicine;
@@ -29,8 +28,10 @@ import com.cryptic.imed.util.view.TwoLineListItemWithImageView;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboListFragment;
+import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectResource;
 
+import javax.annotation.Nullable;
 import java.util.Comparator;
 
 /**
@@ -46,6 +47,10 @@ public class MedicineListFragment extends RoboListFragment {
     @Inject
     private LayoutInflater layoutInflater;
 
+    @InjectFragment(R.id.details_container)
+    @Nullable
+    private MedicineDetailsFragment medicineDetailsFragment;
+
     @InjectResource(R.string.x_units_available)
     private String xUnitsAvailable;
     @InjectResource(R.string.edit)
@@ -56,7 +61,6 @@ public class MedicineListFragment extends RoboListFragment {
     private Drawable defaultMedicinePhoto;
 
     private boolean dualPane;
-    private MedicineDetailsFragment medicineDetailsFragment;
 
     public MedicineListFragment() {
         medicineDao = DbHelper.getHelper().getRuntimeExceptionDao(Medicine.class);
@@ -100,8 +104,6 @@ public class MedicineListFragment extends RoboListFragment {
 
         dualPane = DualPaneUtils.isDualPane(getActivity(), R.id.details_container);
         if (dualPane) {
-            medicineDetailsFragment = (MedicineDetailsFragment)
-                    getFragmentManager().findFragmentByTag(MedicineListActivity.TAG_MEDICINE_DETAILS_FRAGMENT);
             selectFirstItemInList();
         }
     }
@@ -126,6 +128,7 @@ public class MedicineListFragment extends RoboListFragment {
     }
 
     private void updateDetailsFragment(Object selectedItem) {
+        assert medicineDetailsFragment != null;
         medicineDetailsFragment.setMedicine(selectedItem == null ? null : (Medicine) selectedItem);
         medicineDetailsFragment.updateView();
     }

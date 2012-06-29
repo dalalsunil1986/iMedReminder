@@ -21,8 +21,11 @@ import com.cryptic.imed.util.StringUtils;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboFragment;
+import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
+
+import javax.annotation.Nullable;
 
 /**
  * @author sharafat
@@ -32,6 +35,10 @@ public class DoctorDetailsFragment extends RoboFragment {
 
     @Inject
     private Application application;
+
+    @InjectFragment(R.id.list_container)
+    @Nullable
+    private DoctorListFragment doctorListFragment;
 
     @InjectView(R.id.doctor_details_view)
     private ScrollView doctorDetailsView;
@@ -56,7 +63,6 @@ public class DoctorDetailsFragment extends RoboFragment {
     private Drawable defaultPhoto;
 
     private boolean dualPanel;
-    private DoctorListFragment doctorListFragment;
     private Doctor doctor;
 
     public DoctorDetailsFragment() {
@@ -70,10 +76,6 @@ public class DoctorDetailsFragment extends RoboFragment {
         CompatibilityUtils.setHomeButtonEnabled(true, getActivity());
 
         dualPanel = DualPaneUtils.isDualPane(getActivity(), R.id.list_container);
-        if (dualPanel) {
-            doctorListFragment = (DoctorListFragment)
-                    getFragmentManager().findFragmentByTag(DoctorListActivity.TAG_DOCTOR_LIST_FRAGMENT);
-        }
     }
 
     @Override
@@ -120,6 +122,7 @@ public class DoctorDetailsFragment extends RoboFragment {
                 break;
             case R.id.menu_delete:
                 if (dualPanel) {
+                    assert doctorListFragment != null;
                     doctorListFragment.deleteDoctorAndUpdateView(doctor);
                 } else {
                     doctor.setDeleted(true);
