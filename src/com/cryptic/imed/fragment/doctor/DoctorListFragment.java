@@ -2,10 +2,9 @@ package com.cryptic.imed.fragment.doctor;
 
 import android.app.Application;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -21,6 +20,7 @@ import com.cryptic.imed.common.Constants;
 import com.cryptic.imed.domain.Doctor;
 import com.cryptic.imed.util.adapter.Filterable;
 import com.cryptic.imed.util.adapter.FilterableArrayAdapter;
+import com.cryptic.imed.util.adapter.TextWatcherAdapter;
 import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.DualPaneUtils;
@@ -49,6 +49,8 @@ public class DoctorListFragment extends RoboListFragment {
     private String edit;
     @InjectResource(R.string.delete)
     private String delete;
+    @InjectResource(R.drawable.ic_default_photo)
+    private Drawable defaultPhoto;
 
     private boolean dualPane;
     private DoctorDetailsFragment doctorDetailsFragment;
@@ -65,17 +67,7 @@ public class DoctorListFragment extends RoboListFragment {
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         EditText filterInput = (EditText) getActivity().findViewById(R.id.filter_input);
-        filterInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //ignore
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //ignore
-            }
-
+        filterInput.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void afterTextChanged(Editable s) {
                 ((DoctorListAdapter) getListAdapter()).getFilter().filter(s, new Filter.FilterListener() {
@@ -246,8 +238,7 @@ public class DoctorListFragment extends RoboListFragment {
             Doctor doctor = (Doctor) getItem(position);
             return TwoLineListItemWithImageView.getView(layoutInflater, convertView, parent,
                     doctor.getName(), doctor.getAddress(),
-                    doctor.getPhoto() != null ? doctor.getPhoto() : ImageUtils.getByteArray(
-                            BitmapFactory.decodeResource(getResources(), R.drawable.ic_default_photo)));
+                    ImageUtils.getNonEmptyImage(doctor.getPhoto(), defaultPhoto));
         }
     }
 }

@@ -2,6 +2,7 @@ package com.cryptic.imed.fragment.doctor;
 
 import android.app.Application;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.ImageView;
@@ -51,6 +52,8 @@ public class DoctorDetailsFragment extends RoboFragment {
 
     @InjectResource(R.string.not_available)
     private String notAvailable;
+    @InjectResource(R.drawable.ic_default_photo)
+    private Drawable defaultPhoto;
 
     private boolean dualPanel;
     private DoctorListFragment doctorListFragment;
@@ -92,11 +95,7 @@ public class DoctorDetailsFragment extends RoboFragment {
             docEmailTextView.setText(StringUtils.getNonEmptyString(doctor.getEmail(), notAvailable));
             docWebsiteTextView.setText(StringUtils.getNonEmptyString(doctor.getWebsite(), notAvailable));
             notesTextView.setText(StringUtils.getNonEmptyString(doctor.getNotes(), notAvailable));
-            if (doctor.getPhoto() != null) {
-                docPhotoImageView.setImageBitmap(ImageUtils.getBitmap(doctor.getPhoto()));
-            } else {
-                docPhotoImageView.setImageResource(R.drawable.ic_default_photo);
-            }
+            docPhotoImageView.setImageBitmap(ImageUtils.getNonEmptyImage(doctor.getPhoto(), defaultPhoto));
 
             doctorDetailsView.setVisibility(View.VISIBLE);
             setHasOptionsMenu(true);
