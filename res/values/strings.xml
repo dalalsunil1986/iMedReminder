@@ -12,6 +12,18 @@
     <string name="delete">Delete</string>
     <string name="not_available">N/A</string>
 
+    <!-- Medicine Types -->
+    <string name="tablet">Tablet</string>
+    <string name="capsule">Capsule</string>
+    <string name="syrup">Syrup</string>
+    <string name="injection">Injection</string>
+    <string name="saline">Saline</string>
+    <string name="drop">Drop</string>
+    <string name="cream">Cream/Oinment</string>
+    <string name="inhaler">Inhaler</string>
+    <string name="spray">Spray</string>
+    <string name="other">Other</string>
+
     <!-- Dashboard -->
     <string name="prescriptions">Prescriptions</string>
     <string name="medicines">Medicines</string>
@@ -38,6 +50,8 @@
     <string name="add_medicine_photo">Add Medicine Photo</string>
     <string name="take_from_camera">Take From Camera</string>
     <string name="pick_from_gallery">Pick From Gallery</string>
+    <string name="pick_from_stock">Pick From Stock</string>
+    <string name="select_med_photo">Select Medicine Photo</string>
 
     <!-- Doctor List -->
     <string name="doctor_list">Doctor List</string>

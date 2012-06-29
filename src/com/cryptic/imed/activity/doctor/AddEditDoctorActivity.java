@@ -56,7 +56,7 @@ public class AddEditDoctorActivity extends RoboActivity {
     @InjectView(R.id.take_photo_btn)
     private ImageButton takePhotoButton;
 
-    @InjectResource(R.array.photo_taking_options)
+    @InjectResource(R.array.doctor_photo_taking_options)
     private String[] photoTakingOptions;
     @InjectResource(R.string.add_doctor_photo)
     private String addDoctorPhoto;
@@ -104,7 +104,7 @@ public class AddEditDoctorActivity extends RoboActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int selectedOptionIndex) {
                         switch (selectedOptionIndex) {
-                            case 0:
+                            case 0: //take from camera
                                 try {
                                     photoTaker.takePhotoFromCamera();
                                 } catch (CameraUnavailableException e) {
@@ -113,7 +113,7 @@ public class AddEditDoctorActivity extends RoboActivity {
                                     takePhotoButton.setEnabled(false);
                                 }
                                 break;
-                            case 1:
+                            case 1: //pick from gallery
                                 photoTaker.pickImageFromGallery();
                                 break;
                         }

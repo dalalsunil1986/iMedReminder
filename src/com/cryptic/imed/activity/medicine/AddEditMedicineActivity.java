@@ -1,31 +1,30 @@
 package com.cryptic.imed.activity.medicine;
 
 import android.app.AlertDialog;
+import android.app.Application;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Spinner;
+import android.view.*;
+import android.widget.*;
 import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
 import com.cryptic.imed.domain.MedicationUnit;
 import com.cryptic.imed.domain.Medicine;
+import com.cryptic.imed.domain.MedicineType;
 import com.cryptic.imed.fragment.medicine.MedicineListFragment;
+import com.cryptic.imed.util.StringUtils;
+import com.cryptic.imed.util.Validation;
 import com.cryptic.imed.util.photo.camera.CameraUnavailableException;
 import com.cryptic.imed.util.photo.camera.OnPhotoTakeListener;
 import com.cryptic.imed.util.photo.camera.PhotoTaker;
 import com.cryptic.imed.util.photo.util.BitmapByteArrayConverter;
 import com.cryptic.imed.util.view.CompatibilityUtils;
-import com.cryptic.imed.util.StringUtils;
-import com.cryptic.imed.util.Validation;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.activity.RoboActivity;
@@ -43,6 +42,10 @@ public class AddEditMedicineActivity extends RoboActivity {
     private final RuntimeExceptionDao<Medicine, Integer> medicineDao;
 
     @Inject
+    private Application application;
+    @Inject
+    private LayoutInflater layoutInflater;
+    @Inject
     private PhotoTaker photoTaker;
 
     @InjectView(R.id.med_name_input)
@@ -56,16 +59,19 @@ public class AddEditMedicineActivity extends RoboActivity {
     @InjectView(R.id.medication_unit_spinner)
     private Spinner medicationUnitSpinner;
 
-    @InjectResource(R.array.photo_taking_options)
+    @InjectResource(R.array.medicine_photo_taking_options)
     private String[] photoTakingOptions;
     @InjectResource(R.string.add_medicine_photo)
     private String addMedicinePhoto;
+    @InjectResource(R.string.select_med_photo)
+    private String selectMedicinePhoto;
     @InjectResource(R.string.remove_photo)
     private String removePhoto;
     @InjectResource(R.string.required)
     private String required;
 
     private AlertDialog addMedicinePhotoDialog;
+    private Dialog pickMedicinePhotoFromStockDialog;
     private OnPhotoTakeListener onPhotoTakeListener;
 
     private Medicine medicine;
@@ -81,6 +87,7 @@ public class AddEditMedicineActivity extends RoboActivity {
         setMedicationUnitSpinnerAdapter();
         setPhotoTakerOptions();
         createAddMedicinePhotoDialog();
+        createPickMedicinePhotoFromStockDialog();
         setOnPhotoTakeListener();
         prepareMedicine(getIntent().getSerializableExtra(MedicineListFragment.KEY_MEDICINE));
         registerForContextMenu(takePhotoButton);
@@ -108,7 +115,7 @@ public class AddEditMedicineActivity extends RoboActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int selectedOptionIndex) {
                         switch (selectedOptionIndex) {
-                            case 0:
+                            case 0: //take from camera
                                 try {
                                     photoTaker.takePhotoFromCamera();
                                 } catch (CameraUnavailableException e) {
@@ -117,12 +124,40 @@ public class AddEditMedicineActivity extends RoboActivity {
                                     takePhotoButton.setEnabled(false);
                                 }
                                 break;
-                            case 1:
+                            case 1: //pick from gallery
                                 photoTaker.pickImageFromGallery();
+                                break;
+                            case 2: //pick from stock
+                                showPickPhotoFromStockDialog();
                                 break;
                         }
                     }
                 }).create();
+    }
+
+    private void createPickMedicinePhotoFromStockDialog() {
+        ListView medPhotoFromStockListView = new ListView(this);
+        medPhotoFromStockListView.setBackgroundColor(Color.WHITE);
+        medPhotoFromStockListView.setAdapter(new MedicineTypeListAdapter());
+        medPhotoFromStockListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                MedicineType medicineType = ((MedicineTypeListAdapter) parent.getAdapter()).getItem(position);
+
+                medicine.setPhoto(BitmapByteArrayConverter.drawable2ByteArray(medicineType.getIcon()));
+                takePhotoButton.setImageDrawable(medicineType.getIcon());
+
+                pickMedicinePhotoFromStockDialog.hide();
+            }
+        });
+
+        pickMedicinePhotoFromStockDialog = new Dialog(this);
+        pickMedicinePhotoFromStockDialog.setTitle(selectMedicinePhoto);
+        pickMedicinePhotoFromStockDialog.setContentView(medPhotoFromStockListView);
+    }
+
+    private void showPickPhotoFromStockDialog() {
+        pickMedicinePhotoFromStockDialog.show();
     }
 
     private void setOnPhotoTakeListener() {
@@ -240,5 +275,35 @@ public class AddEditMedicineActivity extends RoboActivity {
     protected void finalize() throws Throwable {
         super.finalize();
         DbHelper.release();
+    }
+
+
+    private class MedicineTypeListAdapter extends ArrayAdapter<MedicineType> {
+        public MedicineTypeListAdapter() {
+            super(application, 0, MedicineType.values());
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                /*
+                Using android.R.layout.simple_list_item_1 somehow sets its layout width as wrap_content when the list
+                is placed inside a dialog.
+                Interestingly, wrapping the TextView inside a RelativeLayout causes the list item to match its parent's
+                width (LinearLayout doesn't work either). Therefore, a custom layout has been used as list item.
+                c.f. https://groups.google.com/forum/?fromgroups#!topic/android-developers/Ylgekx-A2Xw
+                 */
+                convertView = layoutInflater.inflate(R.layout.pick_med_photo_from_stock_list_item, parent, false);
+            }
+
+            TextView textView = (TextView) convertView.findViewById(R.id.text);
+
+            MedicineType medicineType = getItem(position);
+
+            textView.setText(medicineType.getUserFriendlyName());
+            textView.setCompoundDrawablesWithIntrinsicBounds(medicineType.getIcon(), null, null, null);
+
+            return convertView;
+        }
     }
 }

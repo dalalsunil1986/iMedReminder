@@ -1,5 +1,6 @@
 package com.cryptic.imed.app;
 
+import com.cryptic.imed.domain.MedicineType;
 import com.google.inject.AbstractModule;
 
 /**
@@ -8,6 +9,6 @@ import com.google.inject.AbstractModule;
 public class ApplicationModule extends AbstractModule {
     @Override
     protected void configure() {
-        requestStaticInjection(AbstractDbHelper.class);
+        requestStaticInjection(AbstractDbHelper.class, MedicineType.class);
     }
 }
