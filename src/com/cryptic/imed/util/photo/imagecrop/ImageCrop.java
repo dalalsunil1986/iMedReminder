@@ -16,7 +16,8 @@ import java.util.List;
  * @author sharafat
  */
 public class ImageCrop {
-    public static final int CROP_IMAGE = 2;
+    public static final int REQ_CODE_CROP_IMAGE = 2;
+    public static final String CHOOSE_CROP_APP = "Choose Crop App";
 
     public static boolean isImageCroppingAppAvailable(Activity activity) {
         PackageManager packageManager = activity.getPackageManager();
@@ -65,7 +66,7 @@ public class ImageCrop {
 
             intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
 
-            activity.startActivityForResult(intent, CROP_IMAGE);
+            activity.startActivityForResult(intent, REQ_CODE_CROP_IMAGE);
         } else {
             for (ResolveInfo res : list) {
                 CropOption cropOption = new CropOption();
@@ -82,11 +83,11 @@ public class ImageCrop {
             CropOptionAdapter adapter = new CropOptionAdapter(activity.getApplicationContext(), cropOptions);
 
             new AlertDialog.Builder(activity)
-                    .setTitle("Choose Crop App")
+                    .setTitle(CHOOSE_CROP_APP)
                     .setAdapter(adapter,
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int item) {
-                                    activity.startActivityForResult(cropOptions.get(item).appIntent, CROP_IMAGE);
+                                    activity.startActivityForResult(cropOptions.get(item).appIntent, REQ_CODE_CROP_IMAGE);
                                 }
                             })
                     .setOnCancelListener(

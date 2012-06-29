@@ -38,8 +38,8 @@ import java.util.List;
  */
 @ContentView(R.layout.new_prescription)
 public class AddEditPrescriptionActivity extends RoboActivity {
-    private static final int PICK_DOCTOR = 1;
-    private static final int ADD_MEDICINE = 2;
+    private static final int REQ_CODE_PICK_DOCTOR = 1;
+    private static final int REQ_CODE_ADD_MEDICINE = 2;
 
     private final RuntimeExceptionDao<Prescription, Integer> prescriptionDao;
     private final RuntimeExceptionDao<PrescriptionMedicine, Integer> prescriptionMedicineDao;
@@ -153,23 +153,23 @@ public class AddEditPrescriptionActivity extends RoboActivity {
     }
 
     public void onSelectDoctorClicked(View view) {
-        startActivityForResult(new Intent(this, PickDoctorActivity.class), PICK_DOCTOR);
+        startActivityForResult(new Intent(this, PickDoctorActivity.class), REQ_CODE_PICK_DOCTOR);
     }
 
     public void onAddMedicineButtonClicked(View view) {
-        startActivityForResult(new Intent(this, AddMedicineActivity.class), ADD_MEDICINE);
+        startActivityForResult(new Intent(this, AddMedicineActivity.class), REQ_CODE_ADD_MEDICINE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case PICK_DOCTOR:
+                case REQ_CODE_PICK_DOCTOR:
                     Doctor selectedDoctor = (Doctor) data.getSerializableExtra(PickDoctorActivity.KEY_SELECTED_DOCTOR);
                     prescription.setPrescribedBy(selectedDoctor);
                     pickDoctorView.setText(selectedDoctor.getName());
                     break;
-                case ADD_MEDICINE:
+                case REQ_CODE_ADD_MEDICINE:
                     PrescriptionMedicine prescriptionMedicine = (PrescriptionMedicine)
                             data.getSerializableExtra(MedicineScheduleActivity.KEY_DOSAGE_DETAILS);
                     prescriptionMedicine.setPrescription(prescription);

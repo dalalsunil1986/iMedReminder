@@ -21,8 +21,8 @@ import java.io.File;
  */
 @ContextSingleton
 public class PhotoTaker {
-    private static final int TAKE_PHOTO_FROM_CAMERA = 0;
-    private static final int PICK_IMAGE_FROM_GALLERY = 1;
+    private static final int REQ_CODE_TAKE_PHOTO_FROM_CAMERA = 0;
+    private static final int REQ_CODE_PICK_IMAGE_FROM_GALLERY = 1;
 
     private static final String TEMP_PHOTO_FILE_NAME = "tmp_iMedReminder_";
 
@@ -45,7 +45,7 @@ public class PhotoTaker {
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempPhotoFileUri);
         try {
             cameraIntent.putExtra("return-data", true);
-            activity.startActivityForResult(cameraIntent, TAKE_PHOTO_FROM_CAMERA);
+            activity.startActivityForResult(cameraIntent, REQ_CODE_TAKE_PHOTO_FROM_CAMERA);
         } catch (ActivityNotFoundException ignore) {    // device has no camera
             throw new CameraUnavailableException();
         }
@@ -53,19 +53,19 @@ public class PhotoTaker {
 
     public void pickImageFromGallery() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT).setType("image/*");
-        activity.startActivityForResult(intent, PICK_IMAGE_FROM_GALLERY);
+        activity.startActivityForResult(intent, REQ_CODE_PICK_IMAGE_FROM_GALLERY);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data, OnPhotoTakeListener onPhotoTakeListener) {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
-                case TAKE_PHOTO_FROM_CAMERA:
+                case REQ_CODE_TAKE_PHOTO_FROM_CAMERA:
                     cropPhotoOrNotifyPhotoTakenIfCroppingCannotBeDone(tempPhotoFileUri, onPhotoTakeListener);
                     break;
-                case PICK_IMAGE_FROM_GALLERY:
+                case REQ_CODE_PICK_IMAGE_FROM_GALLERY:
                     cropPhotoOrNotifyPhotoTakenIfCroppingCannotBeDone(data.getData(), onPhotoTakeListener);
                     break;
-                case ImageCrop.CROP_IMAGE:
+                case ImageCrop.REQ_CODE_CROP_IMAGE:
                     Bundle extras = data.getExtras();
                     if (extras != null) {
                         onPhotoTakeListener.onPhotoTaken((Bitmap) extras.getParcelable("data"));
