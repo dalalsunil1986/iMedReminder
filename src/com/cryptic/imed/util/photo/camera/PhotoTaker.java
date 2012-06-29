@@ -1,4 +1,4 @@
-package com.cryptic.imed.photo.camera;
+package com.cryptic.imed.util.photo.camera;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import com.cryptic.imed.photo.imagecrop.*;
+import com.cryptic.imed.util.photo.imagecrop.*;
 import com.google.inject.Inject;
 import roboguice.inject.ContextSingleton;
 

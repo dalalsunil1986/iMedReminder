@@ -1,4 +1,4 @@
-package com.cryptic.imed.photo.camera;
+package com.cryptic.imed.util.photo.camera;
 
 import android.graphics.Bitmap;
 

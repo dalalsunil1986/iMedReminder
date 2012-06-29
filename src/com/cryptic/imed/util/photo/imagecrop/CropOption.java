@@ -1,4 +1,4 @@
-package com.cryptic.imed.photo.imagecrop;
+package com.cryptic.imed.util.photo.imagecrop;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;

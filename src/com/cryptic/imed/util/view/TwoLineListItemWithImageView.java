@@ -1,4 +1,4 @@
-package com.cryptic.imed.util;
+package com.cryptic.imed.util.view;
 
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.cryptic.imed.R;
-import com.cryptic.imed.photo.util.BitmapByteArrayConverter;
+import com.cryptic.imed.util.photo.util.BitmapByteArrayConverter;
 
 /**
  * @author sharafat

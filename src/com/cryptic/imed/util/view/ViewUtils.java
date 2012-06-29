@@ -1,4 +1,4 @@
-package com.cryptic.imed.util;
+package com.cryptic.imed.util.view;
 
 import android.view.View;
 import android.view.ViewGroup;

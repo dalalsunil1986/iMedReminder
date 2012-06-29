@@ -1,4 +1,4 @@
-package com.cryptic.imed.util;
+package com.cryptic.imed.util.adapter;
 
 import android.text.Editable;
 import android.text.TextWatcher;

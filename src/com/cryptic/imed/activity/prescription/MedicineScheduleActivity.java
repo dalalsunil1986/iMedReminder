@@ -15,7 +15,7 @@ import com.cryptic.imed.domain.Dosage;
 import com.cryptic.imed.domain.Medicine;
 import com.cryptic.imed.domain.PrescriptionMedicine;
 import com.cryptic.imed.util.StringUtils;
-import com.cryptic.imed.util.ViewUtils;
+import com.cryptic.imed.util.view.ViewUtils;
 import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;

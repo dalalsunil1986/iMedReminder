@@ -6,7 +6,7 @@ import com.cryptic.imed.R;
 import com.cryptic.imed.activity.doctor.DoctorListActivity;
 import com.cryptic.imed.activity.medicine.MedicineListActivity;
 import com.cryptic.imed.activity.prescription.PrescriptionListActivity;
-import com.cryptic.imed.util.IndefinitelyProgressingTask;
+import com.cryptic.imed.util.view.IndefinitelyProgressingTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import roboguice.activity.RoboActivity;
