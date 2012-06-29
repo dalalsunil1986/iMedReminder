@@ -2,6 +2,7 @@ package com.cryptic.imed.fragment.doctor;
 
 import android.app.Application;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +21,7 @@ import com.cryptic.imed.common.Constants;
 import com.cryptic.imed.domain.Doctor;
 import com.cryptic.imed.util.adapter.Filterable;
 import com.cryptic.imed.util.adapter.FilterableArrayAdapter;
+import com.cryptic.imed.util.photo.util.BitmapByteArrayConverter;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.DualPaneUtils;
 import com.cryptic.imed.util.view.TwoLineListItemWithImageView;
@@ -243,7 +245,9 @@ public class DoctorListFragment extends RoboListFragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             Doctor doctor = (Doctor) getItem(position);
             return TwoLineListItemWithImageView.getView(layoutInflater, convertView, parent,
-                    doctor.getName(), doctor.getAddress(), doctor.getPhoto());
+                    doctor.getName(), doctor.getAddress(),
+                    doctor.getPhoto() != null ? doctor.getPhoto() : BitmapByteArrayConverter.bitmap2ByteArray(
+                            BitmapFactory.decodeResource(getResources(), R.drawable.ic_default_photo)));
         }
     }
 }

@@ -95,7 +95,7 @@ public class DoctorDetailsFragment extends RoboFragment {
             if (doctor.getPhoto() != null) {
                 docPhotoImageView.setImageBitmap(BitmapByteArrayConverter.byteArray2Bitmap(doctor.getPhoto()));
             } else {
-                docPhotoImageView.setImageDrawable(null);
+                docPhotoImageView.setImageResource(R.drawable.ic_default_photo);
             }
 
             doctorDetailsView.setVisibility(View.VISIBLE);
