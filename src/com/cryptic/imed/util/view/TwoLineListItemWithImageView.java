@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.cryptic.imed.R;
-import com.cryptic.imed.util.photo.util.BitmapByteArrayConverter;
+import com.cryptic.imed.util.photo.util.ImageUtils;
 
 /**
  * @author sharafat
@@ -33,7 +33,7 @@ public class TwoLineListItemWithImageView {
     public static View getView(LayoutInflater layoutInflater, View convertView, ViewGroup parent,
                                String primaryText, String secondaryText, byte[] image) {
         return getView(layoutInflater, convertView, parent, primaryText, secondaryText,
-                image == null ? null : BitmapByteArrayConverter.byteArray2Bitmap(image));
+                image == null ? null : ImageUtils.byteArray2Bitmap(image));
     }
 
     public static View getView(LayoutInflater layoutInflater, View convertView, ViewGroup parent,

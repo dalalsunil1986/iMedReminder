@@ -10,7 +10,7 @@ import java.io.ByteArrayOutputStream;
 /**
  * @author sharafat
  */
-public class BitmapByteArrayConverter {
+public class ImageUtils {
 
     public static byte[] bitmap2ByteArray(Bitmap bitmap) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();

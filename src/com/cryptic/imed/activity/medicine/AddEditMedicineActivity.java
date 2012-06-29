@@ -23,7 +23,7 @@ import com.cryptic.imed.util.Validation;
 import com.cryptic.imed.util.photo.camera.CameraUnavailableException;
 import com.cryptic.imed.util.photo.camera.OnPhotoTakeListener;
 import com.cryptic.imed.util.photo.camera.PhotoTaker;
-import com.cryptic.imed.util.photo.util.BitmapByteArrayConverter;
+import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
@@ -144,7 +144,7 @@ public class AddEditMedicineActivity extends RoboActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 MedicineType medicineType = ((MedicineTypeListAdapter) parent.getAdapter()).getItem(position);
 
-                medicine.setPhoto(BitmapByteArrayConverter.drawable2ByteArray(medicineType.getIcon()));
+                medicine.setPhoto(ImageUtils.drawable2ByteArray(medicineType.getIcon()));
                 takePhotoButton.setImageDrawable(medicineType.getIcon());
 
                 pickMedicinePhotoFromStockDialog.hide();
@@ -165,7 +165,7 @@ public class AddEditMedicineActivity extends RoboActivity {
             @Override
             public void onPhotoTaken(Bitmap photo) {
                 if (photo != null) {
-                    medicine.setPhoto(BitmapByteArrayConverter.bitmap2ByteArray(photo));
+                    medicine.setPhoto(ImageUtils.bitmap2ByteArray(photo));
                     takePhotoButton.setImageBitmap(photo);
                 }
             }
@@ -192,7 +192,7 @@ public class AddEditMedicineActivity extends RoboActivity {
             }
         }
         if (medicine.getPhoto() != null) {
-            takePhotoButton.setImageBitmap(BitmapByteArrayConverter.byteArray2Bitmap(medicine.getPhoto()));
+            takePhotoButton.setImageBitmap(ImageUtils.byteArray2Bitmap(medicine.getPhoto()));
         }
     }
 

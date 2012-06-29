@@ -15,7 +15,7 @@ import com.cryptic.imed.domain.Dosage;
 import com.cryptic.imed.domain.Prescription;
 import com.cryptic.imed.domain.PrescriptionMedicine;
 import com.cryptic.imed.fragment.prescription.PrescriptionListFragment;
-import com.cryptic.imed.util.photo.util.BitmapByteArrayConverter;
+import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.Validation;
 import com.cryptic.imed.util.view.ViewUtils;
@@ -251,7 +251,7 @@ public class AddEditPrescriptionActivity extends RoboActivity {
 
             byte[] medicinePhoto = prescriptionMedicine.getMedicine().getPhoto();
             if (medicinePhoto != null) {
-                imageView.setImageBitmap(BitmapByteArrayConverter.byteArray2Bitmap(medicinePhoto));
+                imageView.setImageBitmap(ImageUtils.byteArray2Bitmap(medicinePhoto));
             } else {
                 imageView.setImageDrawable(null);
             }

@@ -19,7 +19,7 @@ import com.cryptic.imed.fragment.doctor.DoctorListFragment;
 import com.cryptic.imed.util.photo.camera.CameraUnavailableException;
 import com.cryptic.imed.util.photo.camera.OnPhotoTakeListener;
 import com.cryptic.imed.util.photo.camera.PhotoTaker;
-import com.cryptic.imed.util.photo.util.BitmapByteArrayConverter;
+import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.Validation;
 import com.google.inject.Inject;
@@ -126,7 +126,7 @@ public class AddEditDoctorActivity extends RoboActivity {
             @Override
             public void onPhotoTaken(Bitmap photo) {
                 if (photo != null) {
-                    doctor.setPhoto(BitmapByteArrayConverter.bitmap2ByteArray(photo));
+                    doctor.setPhoto(ImageUtils.bitmap2ByteArray(photo));
                     takePhotoButton.setImageBitmap(photo);
                 }
             }
@@ -150,7 +150,7 @@ public class AddEditDoctorActivity extends RoboActivity {
         docWebsiteInput.setText(doctor.getWebsite());
         notesInput.setText(doctor.getNotes());
         if (doctor.getPhoto() != null) {
-            takePhotoButton.setImageBitmap(BitmapByteArrayConverter.byteArray2Bitmap(doctor.getPhoto()));
+            takePhotoButton.setImageBitmap(ImageUtils.byteArray2Bitmap(doctor.getPhoto()));
         }
     }
 

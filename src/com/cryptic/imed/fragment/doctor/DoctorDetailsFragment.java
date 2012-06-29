@@ -13,7 +13,7 @@ import com.cryptic.imed.activity.doctor.AddEditDoctorActivity;
 import com.cryptic.imed.activity.doctor.DoctorListActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.domain.Doctor;
-import com.cryptic.imed.util.photo.util.BitmapByteArrayConverter;
+import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.DualPaneUtils;
 import com.cryptic.imed.util.StringUtils;
@@ -93,7 +93,7 @@ public class DoctorDetailsFragment extends RoboFragment {
             docWebsiteTextView.setText(StringUtils.getNonEmptyString(doctor.getWebsite(), notAvailable));
             notesTextView.setText(StringUtils.getNonEmptyString(doctor.getNotes(), notAvailable));
             if (doctor.getPhoto() != null) {
-                docPhotoImageView.setImageBitmap(BitmapByteArrayConverter.byteArray2Bitmap(doctor.getPhoto()));
+                docPhotoImageView.setImageBitmap(ImageUtils.byteArray2Bitmap(doctor.getPhoto()));
             } else {
                 docPhotoImageView.setImageResource(R.drawable.ic_default_photo);
             }

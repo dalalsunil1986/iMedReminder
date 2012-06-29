@@ -21,7 +21,7 @@ import com.cryptic.imed.common.Constants;
 import com.cryptic.imed.domain.Doctor;
 import com.cryptic.imed.util.adapter.Filterable;
 import com.cryptic.imed.util.adapter.FilterableArrayAdapter;
-import com.cryptic.imed.util.photo.util.BitmapByteArrayConverter;
+import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.DualPaneUtils;
 import com.cryptic.imed.util.view.TwoLineListItemWithImageView;
@@ -246,7 +246,7 @@ public class DoctorListFragment extends RoboListFragment {
             Doctor doctor = (Doctor) getItem(position);
             return TwoLineListItemWithImageView.getView(layoutInflater, convertView, parent,
                     doctor.getName(), doctor.getAddress(),
-                    doctor.getPhoto() != null ? doctor.getPhoto() : BitmapByteArrayConverter.bitmap2ByteArray(
+                    doctor.getPhoto() != null ? doctor.getPhoto() : ImageUtils.bitmap2ByteArray(
                             BitmapFactory.decodeResource(getResources(), R.drawable.ic_default_photo)));
         }
     }

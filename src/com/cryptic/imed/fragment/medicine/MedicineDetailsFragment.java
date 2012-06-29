@@ -13,7 +13,7 @@ import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.activity.medicine.MedicineListActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.domain.Medicine;
-import com.cryptic.imed.util.photo.util.BitmapByteArrayConverter;
+import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.DualPaneUtils;
 import com.cryptic.imed.util.StringUtils;
@@ -87,7 +87,7 @@ public class MedicineDetailsFragment extends RoboFragment {
             currentStockTextView.setText(String.format(xUnitsAvailable,
                     StringUtils.dropDecimalIfRoundNumber(medicine.getCurrentStock()), medicine.getMedicationUnit()));
             if (medicine.getPhoto() != null) {
-                medPhotoImageView.setImageBitmap(BitmapByteArrayConverter.byteArray2Bitmap(medicine.getPhoto()));
+                medPhotoImageView.setImageBitmap(ImageUtils.byteArray2Bitmap(medicine.getPhoto()));
             } else {
                 medPhotoImageView.setImageDrawable(null);
             }
