@@ -1,4 +1,4 @@
-package com.cryptic.imed.domain;
+package com.cryptic.imed.domain.enums;
 
 import android.app.Application;
 import android.graphics.drawable.Drawable;

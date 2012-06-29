@@ -1,6 +1,6 @@
 package com.cryptic.imed.app;
 
-import com.cryptic.imed.domain.MedicineType;
+import com.cryptic.imed.domain.enums.MedicineType;
 import com.google.inject.AbstractModule;
 
 /**

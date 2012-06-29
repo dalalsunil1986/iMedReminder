@@ -1,4 +1,4 @@
-package com.cryptic.imed.domain;
+package com.cryptic.imed.domain.enums;
 
 /**
  * @author sharafat

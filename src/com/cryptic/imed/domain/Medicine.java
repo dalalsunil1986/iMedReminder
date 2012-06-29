@@ -1,5 +1,6 @@
 package com.cryptic.imed.domain;
 
+import com.cryptic.imed.domain.enums.MedicationUnit;
 import com.cryptic.imed.util.adapter.Filterable;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
