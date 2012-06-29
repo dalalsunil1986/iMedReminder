@@ -251,11 +251,7 @@ public class AddEditMedicineActivity extends RoboActivity {
         medicine.setCurrentStock(getCurrentStockFromUserInput());
         medicine.setMedicationUnit((MedicationUnit) medicationUnitSpinner.getSelectedItem());
 
-        if (medicine.getId() == 0) {
-            medicineDao.create(medicine);
-        } else {
-            medicineDao.update(medicine);
-        }
+        medicineDao.createOrUpdate(medicine);
     }
 
     private float getCurrentStockFromUserInput() {

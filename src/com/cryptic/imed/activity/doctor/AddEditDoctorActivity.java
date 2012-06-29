@@ -213,11 +213,7 @@ public class AddEditDoctorActivity extends RoboActivity {
         doctor.setWebsite(docWebsiteInput.getText().toString());
         doctor.setNotes(notesInput.getText().toString());
 
-        if (doctor.getId() == 0) {
-            doctorDao.create(doctor);
-        } else {
-            doctorDao.update(doctor);
-        }
+        doctorDao.createOrUpdate(doctor);
     }
 
     public void onCancelButtonClicked(View view) {
