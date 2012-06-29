@@ -6,6 +6,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * @author sharafat
@@ -118,12 +119,31 @@ public class Doctor implements Filterable, Serializable {
 
         Doctor doctor = (Doctor) o;
 
-        return id == doctor.id;
+        if (deleted != doctor.deleted) return false;
+        if (id != doctor.id) return false;
+        if (address != null ? !address.equals(doctor.address) : doctor.address != null) return false;
+        if (email != null ? !email.equals(doctor.email) : doctor.email != null) return false;
+        if (!name.equals(doctor.name)) return false;
+        if (notes != null ? !notes.equals(doctor.notes) : doctor.notes != null) return false;
+        if (phone != null ? !phone.equals(doctor.phone) : doctor.phone != null) return false;
+        if (!Arrays.equals(photo, doctor.photo)) return false;
+        if (website != null ? !website.equals(doctor.website) : doctor.website != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return id;
+        int result = id;
+        result = 31 * result + name.hashCode();
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (website != null ? website.hashCode() : 0);
+        result = 31 * result + (notes != null ? notes.hashCode() : 0);
+        result = 31 * result + (photo != null ? Arrays.hashCode(photo) : 0);
+        result = 31 * result + (deleted ? 1 : 0);
+        return result;
     }
 
     @Override

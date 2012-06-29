@@ -6,6 +6,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * @author sharafat
@@ -96,12 +97,27 @@ public class Medicine implements Filterable, Serializable {
 
         Medicine medicine = (Medicine) o;
 
-        return id == medicine.id;
+        if (Float.compare(medicine.currentStock, currentStock) != 0) return false;
+        if (deleted != medicine.deleted) return false;
+        if (id != medicine.id) return false;
+        if (details != null ? !details.equals(medicine.details) : medicine.details != null) return false;
+        if (medicationUnit != medicine.medicationUnit) return false;
+        if (!name.equals(medicine.name)) return false;
+        if (!Arrays.equals(photo, medicine.photo)) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return id;
+        int result = id;
+        result = 31 * result + name.hashCode();
+        result = 31 * result + (details != null ? details.hashCode() : 0);
+        result = 31 * result + medicationUnit.hashCode();
+        result = 31 * result + (currentStock != +0.0f ? Float.floatToIntBits(currentStock) : 0);
+        result = 31 * result + (photo != null ? Arrays.hashCode(photo) : 0);
+        result = 31 * result + (deleted ? 1 : 0);
+        return result;
     }
 
     @Override

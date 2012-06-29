@@ -109,12 +109,30 @@ public class PrescriptionMedicine implements Serializable {
 
         PrescriptionMedicine that = (PrescriptionMedicine) o;
 
-        return id == that.id;
+        if (dayInterval != that.dayInterval) return false;
+        if (dosesToTake != that.dosesToTake) return false;
+        if (id != that.id) return false;
+        if (totalDaysToTake != that.totalDaysToTake) return false;
+        if (dosageReminders != null ? !dosageReminders.equals(that.dosageReminders) : that.dosageReminders != null)
+            return false;
+        if (medicine != null ? !medicine.equals(that.medicine) : that.medicine != null) return false;
+        if (prescription != null ? !prescription.equals(that.prescription) : that.prescription != null) return false;
+        if (!startDate.equals(that.startDate)) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return id;
+        int result = id;
+        result = 31 * result + (prescription != null ? prescription.hashCode() : 0);
+        result = 31 * result + (medicine != null ? medicine.hashCode() : 0);
+        result = 31 * result + startDate.hashCode();
+        result = 31 * result + dosesToTake;
+        result = 31 * result + dayInterval;
+        result = 31 * result + totalDaysToTake;
+        result = 31 * result + (dosageReminders != null ? dosageReminders.hashCode() : 0);
+        return result;
     }
 
     @Override
