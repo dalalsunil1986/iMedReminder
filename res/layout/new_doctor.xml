@@ -89,7 +89,9 @@
             <EditText android:id="@+id/notes_input"
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
-                      android:inputType="textMultiLine|textCapSentences"/>
+                      android:gravity="top"
+                      android:inputType="textMultiLine|textCapSentences"
+                      android:lines="2"/>
 
         </LinearLayout>
 
