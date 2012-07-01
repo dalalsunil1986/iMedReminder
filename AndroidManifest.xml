@@ -57,6 +57,20 @@
                   android:windowSoftInputMode="stateHidden"
                   android:configChanges="orientation|screenSize|keyboardHidden"/>
 
+        <!-- Pharmacy Activities -->
+        <activity android:name=".activity.pharmacy.PharmacyListActivity"
+                  android:label="@string/pharmacy_list"
+                  android:windowSoftInputMode="stateHidden"
+                  android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".activity.pharmacy.PharmacyDetailsActivity"
+                  android:label="@string/pharmacy_details"
+                  android:windowSoftInputMode="stateHidden"
+                  android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".activity.pharmacy.AddEditPharmacyActivity"
+                  android:label="@string/new_pharmacy"
+                  android:windowSoftInputMode="stateHidden"
+                  android:configChanges="orientation|screenSize|keyboardHidden"/>
+
         <!-- Prescription Activities -->
         <activity android:name=".activity.prescription.PrescriptionListActivity"
                   android:label="@string/prescription_list"

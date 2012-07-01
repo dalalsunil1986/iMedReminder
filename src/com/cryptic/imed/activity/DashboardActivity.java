@@ -5,6 +5,7 @@ import android.view.View;
 import com.cryptic.imed.R;
 import com.cryptic.imed.activity.doctor.DoctorListActivity;
 import com.cryptic.imed.activity.medicine.MedicineListActivity;
+import com.cryptic.imed.activity.pharmacy.PharmacyListActivity;
 import com.cryptic.imed.activity.prescription.PrescriptionListActivity;
 import com.cryptic.imed.util.view.IndefinitelyProgressingTask;
 import org.slf4j.Logger;
@@ -33,7 +34,7 @@ public class DashboardActivity extends RoboActivity {
     }
 
     public void onPharmaciesClicked(View view) {
-        log.debug("Pharmacies clicked");
+        startActivity(PharmacyListActivity.class);
     }
 
     public void onAppointmentsClicked(View view) {

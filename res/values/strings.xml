@@ -71,6 +71,16 @@
     <string name="invalid_email">Invalid Email Address</string>
     <string name="invalid_url">Invalid Website URL</string>
 
+    <!-- Pharmacy List -->
+    <string name="pharmacy_list">Pharmacy List</string>
+    <string name="new_pharmacy">New Pharmacy</string>
+
+    <!-- Pharmacy Details-->
+    <string name="pharmacy_details">Pharmacy Details</string>
+
+    <!-- Add/Edit Pharmacy -->
+    <string name="pharmacy_name">Pharmacy Name</string>
+
     <!-- Prescription List -->
     <string name="prescription_list">Prescription List</string>
     <string name="new_prescription">New Prescription</string>

@@ -1,10 +1,9 @@
-package com.cryptic.imed.fragment.prescription;
+package com.cryptic.imed.fragment.pharmacy;
 
 import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.format.DateFormat;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -12,11 +11,11 @@ import android.widget.Filter;
 import android.widget.ListView;
 import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
-import com.cryptic.imed.activity.prescription.AddEditPrescriptionActivity;
-import com.cryptic.imed.activity.prescription.PrescriptionDetailsActivity;
+import com.cryptic.imed.activity.pharmacy.AddEditPharmacyActivity;
+import com.cryptic.imed.activity.pharmacy.PharmacyDetailsActivity;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
-import com.cryptic.imed.domain.Prescription;
+import com.cryptic.imed.domain.Pharmacy;
 import com.cryptic.imed.util.adapter.Filterable;
 import com.cryptic.imed.util.adapter.FilterableArrayAdapter;
 import com.cryptic.imed.util.adapter.TextWatcherAdapter;
@@ -35,10 +34,10 @@ import java.util.Comparator;
 /**
  * @author sharafat
  */
-public class PrescriptionListFragment extends RoboListFragment {
-    public static final String KEY_PRESCRIPTION = "prescription";
+public class PharmacyListFragment extends RoboListFragment {
+    public static final String KEY_PHARMACY = "pharmacy";
 
-    private final RuntimeExceptionDao<Prescription, Integer> prescriptionDao;
+    private final RuntimeExceptionDao<Pharmacy, Integer> pharmacyDao;
 
     @Inject
     private Application application;
@@ -47,33 +46,31 @@ public class PrescriptionListFragment extends RoboListFragment {
 
     @InjectFragment(R.id.details_container)
     @Nullable
-    private PrescriptionDetailsFragment prescriptionDetailsFragment;
+    private PharmacyDetailsFragment pharmacyDetailsFragment;
 
     @InjectResource(R.string.edit)
     private String edit;
     @InjectResource(R.string.delete)
     private String delete;
-    @InjectResource(R.string.added_on)
-    private String addedOn;
 
     private boolean dualPane;
 
-    public PrescriptionListFragment() {
-        prescriptionDao = DbHelper.getHelper().getRuntimeExceptionDao(Prescription.class);
+    public PharmacyListFragment() {
+        pharmacyDao = DbHelper.getHelper().getRuntimeExceptionDao(Pharmacy.class);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setListAdapter(new PrescriptionListAdapter());
+        setListAdapter(new PharmacyListAdapter());
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         EditText filterInput = (EditText) getActivity().findViewById(R.id.filter_input);
         filterInput.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void afterTextChanged(Editable s) {
-                ((PrescriptionListAdapter) getListAdapter()).getFilter().filter(s, new Filter.FilterListener() {
+                ((PharmacyListAdapter) getListAdapter()).getFilter().filter(s, new Filter.FilterListener() {
                     @Override
                     public void onFilterComplete(int count) {
                         if (dualPane) {
@@ -114,9 +111,9 @@ public class PrescriptionListFragment extends RoboListFragment {
     }
 
     private void updateDetailsFragment(Object selectedItem) {
-        assert prescriptionDetailsFragment != null;
-        prescriptionDetailsFragment.setPrescription(selectedItem == null ? null : (Prescription) selectedItem);
-        prescriptionDetailsFragment.updateView();
+        assert pharmacyDetailsFragment != null;
+        pharmacyDetailsFragment.setPharmacy(selectedItem == null ? null : (Pharmacy) selectedItem);
+        pharmacyDetailsFragment.updateView();
     }
 
     @Override
@@ -127,9 +124,9 @@ public class PrescriptionListFragment extends RoboListFragment {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        Prescription selectedPrescription = (Prescription) getListAdapter().getItem(info.position);
+        Pharmacy selectedPharmacy = (Pharmacy) getListAdapter().getItem(info.position);
 
-        menu.setHeaderTitle(selectedPrescription.getTitle());
+        menu.setHeaderTitle(selectedPharmacy.getName());
         menu.add(Menu.NONE, Constants.CONTEXT_MENU_EDIT, 0, edit);
         menu.add(Menu.NONE, Constants.CONTEXT_MENU_DELETE, 1, delete);
     }
@@ -137,59 +134,60 @@ public class PrescriptionListFragment extends RoboListFragment {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Prescription selectedPrescription = (Prescription) getListAdapter().getItem(info.position);
+        Pharmacy selectedPharmacy = (Pharmacy) getListAdapter().getItem(info.position);
 
         switch (item.getItemId()) {
             case Constants.CONTEXT_MENU_EDIT:
-                Intent intent = new Intent(application, AddEditPrescriptionActivity.class);
-                intent.putExtra(KEY_PRESCRIPTION, selectedPrescription);
+                Intent intent = new Intent(application, AddEditPharmacyActivity.class);
+                intent.putExtra(KEY_PHARMACY, selectedPharmacy);
                 startActivity(intent);
                 return true;
             case Constants.CONTEXT_MENU_DELETE:
-                deletePrescriptionAndUpdateView(selectedPrescription);
+                deletePharmacyAndUpdateView(selectedPharmacy);
                 return true;
         }
 
         return false;
     }
 
-    public void deletePrescriptionAndUpdateView(Prescription prescription) {
-        deletePrescription(prescription);
-        int selectedPrescriptionIndex = updatePrescriptionList(prescription);
+    public void deletePharmacyAndUpdateView(Pharmacy pharmacy) {
+        deletePharmacy(pharmacy);
+        int selectedPharmacyIndex = updatePharmacyList(pharmacy);
         if (dualPane) {
             try {
-                selectItemInList(selectedPrescriptionIndex);
+                selectItemInList(selectedPharmacyIndex);
             } catch (ArrayIndexOutOfBoundsException e) {
-                selectItemInList(selectedPrescriptionIndex - 1);
+                selectItemInList(selectedPharmacyIndex - 1);
             }
         }
     }
 
-    private void deletePrescription(Prescription prescription) {
-        prescriptionDao.delete(prescription);
+    private void deletePharmacy(Pharmacy pharmacy) {
+        pharmacy.setDeleted(true);
+        pharmacyDao.update(pharmacy);
     }
 
-    private int updatePrescriptionList(Prescription selectedPrescription) {
-        PrescriptionListAdapter prescriptionListAdapter = (PrescriptionListAdapter) getListAdapter();
+    private int updatePharmacyList(Pharmacy selectedPharmacy) {
+        PharmacyListAdapter pharmacyListAdapter = (PharmacyListAdapter) getListAdapter();
 
-        int selectedPrescriptionIndex = prescriptionListAdapter.getPosition(selectedPrescription);
+        int selectedPharmacyIndex = pharmacyListAdapter.getPosition(selectedPharmacy);
 
-        prescriptionListAdapter.remove(selectedPrescription);
-        prescriptionListAdapter.notifyDataSetInvalidated();
+        pharmacyListAdapter.remove(selectedPharmacy);
+        pharmacyListAdapter.notifyDataSetInvalidated();
 
-        return selectedPrescriptionIndex;
+        return selectedPharmacyIndex;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.prescription_list_options_menu, menu);
+        inflater.inflate(R.menu.pharmacy_list_options_menu, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_new_prescription:
-                startActivity(new Intent(application, AddEditPrescriptionActivity.class));
+            case R.id.menu_new_pharmacy:
+                startActivity(new Intent(application, AddEditPharmacyActivity.class));
                 break;
             case android.R.id.home:
                 startActivity(new Intent(application, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -201,14 +199,14 @@ public class PrescriptionListFragment extends RoboListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Prescription selectedPrescription = (Prescription) getListAdapter().getItem(position);
+        Pharmacy selectedPharmacy = (Pharmacy) getListAdapter().getItem(position);
 
         if (dualPane) {
             getListView().setItemChecked(position, true);
-            updateDetailsFragment(selectedPrescription);
+            updateDetailsFragment(selectedPharmacy);
         } else {
-            Intent intent = new Intent(application, PrescriptionDetailsActivity.class);
-            intent.putExtra(KEY_PRESCRIPTION, selectedPrescription);
+            Intent intent = new Intent(application, PharmacyDetailsActivity.class);
+            intent.putExtra(KEY_PHARMACY, selectedPharmacy);
             startActivity(intent);
         }
     }
@@ -220,26 +218,25 @@ public class PrescriptionListFragment extends RoboListFragment {
     }
 
 
-    private class PrescriptionListAdapter extends FilterableArrayAdapter {
-        PrescriptionListAdapter() {
+    private class PharmacyListAdapter extends FilterableArrayAdapter {
+        PharmacyListAdapter() {
             super(application, 0);
 
-            addAll(prescriptionDao.queryForAll());
+            addAll(pharmacyDao.queryForEq("deleted", false));
 
             sort(new Comparator<Filterable>() {
                 @Override
                 public int compare(Filterable lhs, Filterable rhs) {
-                    return ((Prescription) lhs).getTitle().compareTo(((Prescription) rhs).getTitle());
+                    return ((Pharmacy) lhs).getName().compareTo(((Pharmacy) rhs).getName());
                 }
             });
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Prescription prescription = (Prescription) getItem(position);
+            Pharmacy pharmacy = (Pharmacy) getItem(position);
             return TwoLineListItemView.getView(layoutInflater, convertView, parent,
-                    prescription.getTitle(), String.format(addedOn,
-                    DateFormat.format(Constants.PRESCRIPTION_DETAILS_DATE_FORMAT, prescription.getIssueDate())));
+                    pharmacy.getName(), pharmacy.getAddress());
         }
     }
 }
