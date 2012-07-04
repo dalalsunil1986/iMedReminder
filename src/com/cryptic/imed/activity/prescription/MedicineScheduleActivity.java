@@ -195,7 +195,7 @@ public class MedicineScheduleActivity extends RoboActivity {
 
             final Calendar calendar = Calendar.getInstance();
             calendar.setTime(dosage.getTime());
-            dosageTimeBtn.setText(DateFormat.format(Constants.TIME_FORMAT, dosage.getTime()));
+            dosageTimeBtn.setText(DateFormat.format(Constants.GENERAL_TIME_FORMAT, dosage.getTime()));
             dosageTimeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -207,7 +207,7 @@ public class MedicineScheduleActivity extends RoboActivity {
 
                             dosage.setTime(calendar.getTime());
 
-                            dosageTimeBtn.setText(DateFormat.format(Constants.TIME_FORMAT, calendar.getTime()));
+                            dosageTimeBtn.setText(DateFormat.format(Constants.GENERAL_TIME_FORMAT, calendar.getTime()));
                         }
                     }, calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), false).show();
                 }

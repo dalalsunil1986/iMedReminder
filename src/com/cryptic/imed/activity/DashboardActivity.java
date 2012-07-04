@@ -3,6 +3,7 @@ package com.cryptic.imed.activity;
 import android.content.Intent;
 import android.view.View;
 import com.cryptic.imed.R;
+import com.cryptic.imed.activity.appointment.AppointmentListActivity;
 import com.cryptic.imed.activity.doctor.DoctorListActivity;
 import com.cryptic.imed.activity.medicine.MedicineListActivity;
 import com.cryptic.imed.activity.pharmacy.PharmacyListActivity;
@@ -38,7 +39,7 @@ public class DashboardActivity extends RoboActivity {
     }
 
     public void onAppointmentsClicked(View view) {
-        log.debug("Appointments clicked");
+        startActivity(AppointmentListActivity.class);
     }
 
     public void onSchedulesClicked(View view) {

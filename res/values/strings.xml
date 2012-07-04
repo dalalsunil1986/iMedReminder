@@ -11,6 +11,8 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="not_available">N/A</string>
+    <string name="doctor">Doctor</string>
+    <string name="pharmacy">Pharmacy</string>
 
     <!-- Medicine Types -->
     <string name="tablet">Tablet</string>
@@ -31,6 +33,11 @@
     <string name="pharmacies">Pharmacies</string>
     <string name="appointments">Appointments</string>
     <string name="schedules">Schedules</string>
+
+
+    <!-- ********************** -->
+    <!--        Medicine        -->
+    <!-- ********************** -->
 
     <!-- Medicine List -->
     <string name="medicine_list">Medicine List</string>
@@ -53,6 +60,11 @@
     <string name="pick_from_stock">Pick From Stock</string>
     <string name="select_med_photo">Select Medicine Photo</string>
 
+
+    <!-- ********************** -->
+    <!--         Doctor         -->
+    <!-- ********************** -->
+
     <!-- Doctor List -->
     <string name="doctor_list">Doctor List</string>
     <string name="new_doctor">New Doctor</string>
@@ -71,6 +83,11 @@
     <string name="invalid_email">Invalid Email Address</string>
     <string name="invalid_url">Invalid Website URL</string>
 
+
+    <!-- ********************** -->
+    <!--        Pharmacy        -->
+    <!-- ********************** -->
+
     <!-- Pharmacy List -->
     <string name="pharmacy_list">Pharmacy List</string>
     <string name="new_pharmacy">New Pharmacy</string>
@@ -80,6 +97,36 @@
 
     <!-- Add/Edit Pharmacy -->
     <string name="pharmacy_name">Pharmacy Name</string>
+
+
+    <!-- ********************** -->
+    <!--      Appointment       -->
+    <!-- ********************** -->
+
+    <!-- Appointment List -->
+    <string name="appointment_list">Appointment List</string>
+    <string name="new_appointment">New Appointment</string>
+
+    <!-- Appointment Details-->
+    <string name="appointment_details">Appointment Details</string>
+
+    <!-- Add/Edit Appointment -->
+    <string name="appointment_with">Appointment With</string>
+    <string name="appointment_with_doctor">@string/doctor</string>
+    <string name="appointment_with_pharmacy">@string/pharmacy</string>
+    <string name="appointment_with_other">@string/other</string>
+    <string name="appointment_time">Appointment Time</string>
+    <string name="pick_pharmacy">Pick Pharmacy</string>
+    <string name="remind_before">Remind Before</string>
+    <string name="time_interval_hours">Hour(s)</string>
+    <string name="time_interval_minutes">Minute(s)</string>
+    <string name="time_interval_days">@string/days</string>
+    <string name="tap_to_select_x">Tap to Select %s</string>
+
+
+    <!-- ********************** -->
+    <!--      Prescription      -->
+    <!-- ********************** -->
 
     <!-- Prescription List -->
     <string name="prescription_list">Prescription List</string>

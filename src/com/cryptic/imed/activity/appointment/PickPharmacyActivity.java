@@ -1,7 +1,6 @@
-package com.cryptic.imed.activity.prescription;
+package com.cryptic.imed.activity.appointment;
 
 import android.app.Application;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.LayoutInflater;
@@ -13,18 +12,16 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import com.cryptic.imed.R;
 import com.cryptic.imed.app.DbHelper;
-import com.cryptic.imed.domain.Doctor;
+import com.cryptic.imed.domain.Pharmacy;
 import com.cryptic.imed.util.adapter.Filterable;
 import com.cryptic.imed.util.adapter.FilterableArrayAdapter;
 import com.cryptic.imed.util.adapter.TextWatcherAdapter;
-import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
-import com.cryptic.imed.util.view.TwoLineListItemWithImageView;
+import com.cryptic.imed.util.view.TwoLineListItemView;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
-import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 
 import java.util.Comparator;
@@ -33,8 +30,8 @@ import java.util.Comparator;
  * @author sharafat
  */
 @ContentView(R.layout.list_container)
-public class PickDoctorActivity extends RoboActivity {
-    public static final String KEY_SELECTED_DOCTOR = "selected_doctor";
+public class PickPharmacyActivity extends RoboActivity {
+    public static final String KEY_SELECTED_PHARMACY = "selected_pharmacy";
 
     @Inject
     private Application application;
@@ -46,9 +43,6 @@ public class PickDoctorActivity extends RoboActivity {
     @InjectView(R.id.filter_input)
     private EditText filterInput;
 
-    @InjectResource(R.drawable.ic_default_photo)
-    private Drawable defaultPhoto;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,12 +51,12 @@ public class PickDoctorActivity extends RoboActivity {
 
         final ListView listView = (ListView) findViewById(android.R.id.list);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        listView.setAdapter(new DoctorListAdapter());
+        listView.setAdapter(new PharmacyListAdapter());
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Doctor selectedDoctor = (Doctor) listView.getAdapter().getItem(position);
-                setResult(RESULT_OK, getIntent().putExtra(KEY_SELECTED_DOCTOR, selectedDoctor));
+                Pharmacy selectedPharmacy = (Pharmacy) listView.getAdapter().getItem(position);
+                setResult(RESULT_OK, getIntent().putExtra(KEY_SELECTED_PHARMACY, selectedPharmacy));
                 finish();
             }
         });
@@ -70,7 +64,7 @@ public class PickDoctorActivity extends RoboActivity {
         filterInput.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void afterTextChanged(Editable s) {
-                ((DoctorListAdapter) listView.getAdapter()).getFilter().filter(s);
+                ((PharmacyListAdapter) listView.getAdapter()).getFilter().filter(s);
             }
         });
 
@@ -78,18 +72,19 @@ public class PickDoctorActivity extends RoboActivity {
     }
 
 
-    private class DoctorListAdapter extends FilterableArrayAdapter {
-        DoctorListAdapter() {
+    private class PharmacyListAdapter extends FilterableArrayAdapter {
+        PharmacyListAdapter() {
             super(application, 0);
 
-            RuntimeExceptionDao<Doctor, Integer> doctorDao = DbHelper.getHelper().getRuntimeExceptionDao(Doctor.class);
+            RuntimeExceptionDao<Pharmacy, Integer> pharmacyDao =
+                    DbHelper.getHelper().getRuntimeExceptionDao(Pharmacy.class);
 
-            addAll(doctorDao.queryForEq("deleted", false));
+            addAll(pharmacyDao.queryForEq("deleted", false));
 
             sort(new Comparator<Filterable>() {
                 @Override
                 public int compare(Filterable lhs, Filterable rhs) {
-                    return ((Doctor) lhs).getName().compareTo(((Doctor) rhs).getName());
+                    return ((Pharmacy) lhs).getName().compareTo(((Pharmacy) rhs).getName());
                 }
             });
 
@@ -98,10 +93,9 @@ public class PickDoctorActivity extends RoboActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Doctor doctor = (Doctor) getItem(position);
-            return TwoLineListItemWithImageView.getView(layoutInflater, convertView, parent,
-                    doctor.getName(), doctor.getAddress(),
-                    ImageUtils.getNonEmptyImage(doctor.getPhoto(), defaultPhoto));
+            Pharmacy pharmacy = (Pharmacy) getItem(position);
+            return TwoLineListItemView.getView(layoutInflater, convertView, parent,
+                    pharmacy.getName(), pharmacy.getAddress());
         }
     }
 }

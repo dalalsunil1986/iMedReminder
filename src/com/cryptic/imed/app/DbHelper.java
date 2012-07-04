@@ -33,6 +33,7 @@ public class DbHelper extends AbstractDbHelper {
             TableUtils.createTable(connectionSource, Medicine.class);
             TableUtils.createTable(connectionSource, Doctor.class);
             TableUtils.createTable(connectionSource, Pharmacy.class);
+            TableUtils.createTable(connectionSource, Appointment.class);
             TableUtils.createTable(connectionSource, Dosage.class);
             TableUtils.createTable(connectionSource, PrescriptionMedicine.class);
             TableUtils.createTable(connectionSource, Prescription.class);

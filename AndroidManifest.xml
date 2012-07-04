@@ -71,6 +71,24 @@
                   android:windowSoftInputMode="stateHidden"
                   android:configChanges="orientation|screenSize|keyboardHidden"/>
 
+        <!-- Appointment Activities -->
+        <activity android:name=".activity.appointment.AppointmentListActivity"
+                  android:label="@string/appointment_list"
+                  android:windowSoftInputMode="stateHidden"
+                  android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".activity.appointment.AppointmentDetailsActivity"
+                  android:label="@string/appointment_details"
+                  android:windowSoftInputMode="stateHidden"
+                  android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".activity.appointment.AddEditAppointmentActivity"
+                  android:label="@string/new_appointment"
+                  android:windowSoftInputMode="stateHidden"
+                  android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".activity.appointment.PickPharmacyActivity"
+                  android:label="@string/pick_pharmacy"
+                  android:windowSoftInputMode="stateHidden"
+                  android:configChanges="orientation|screenSize|keyboardHidden"/>
+
         <!-- Prescription Activities -->
         <activity android:name=".activity.prescription.PrescriptionListActivity"
                   android:label="@string/prescription_list"
