@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
     <TableLayout android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
         </TableRow>
         <TableRow android:layout_marginLeft="15dp"
                   android:layout_marginRight="15dp">
-            <TextView android:layout_width="fill_parent"
+            <TextView android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:layout_marginRight="15dp"
                       android:gravity="center"
@@ -43,7 +43,7 @@
                       android:clickable="true"
                       android:onClick="onPrescriptionsClicked"
                       android:text="@string/prescriptions"/>
-            <TextView android:layout_width="fill_parent"
+            <TextView android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:layout_marginLeft="15dp"
                       android:layout_marginRight="15dp"
@@ -52,7 +52,7 @@
                       android:clickable="true"
                       android:onClick="onMedicinesClicked"
                       android:text="@string/medicines"/>
-            <TextView android:layout_width="fill_parent"
+            <TextView android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:layout_marginLeft="15dp"
                       android:gravity="center"
@@ -90,7 +90,7 @@
         </TableRow>
         <TableRow android:layout_marginLeft="15dp"
                   android:layout_marginRight="15dp">
-            <TextView android:layout_width="fill_parent"
+            <TextView android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:layout_marginRight="15dp"
                       android:gravity="center"
@@ -98,7 +98,7 @@
                       android:clickable="true"
                       android:onClick="onPharmaciesClicked"
                       android:text="@string/pharmacies"/>
-            <TextView android:layout_width="fill_parent"
+            <TextView android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:layout_marginLeft="15dp"
                       android:layout_marginRight="15dp"
@@ -107,7 +107,7 @@
                       android:clickable="true"
                       android:onClick="onAppointmentsClicked"
                       android:text="@string/appointments"/>
-            <TextView android:layout_width="fill_parent"
+            <TextView android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:layout_marginLeft="15dp"
                       android:gravity="center"
