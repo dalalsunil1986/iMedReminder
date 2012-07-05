@@ -6,8 +6,10 @@ package com.cryptic.imed.common;
 public interface Constants {
     int PHOTO_SIZE = 64;
 
-    int CONTEXT_MENU_EDIT = 0;
-    int CONTEXT_MENU_DELETE = 1;
+    int ID_CONTEXT_MENU_EDIT = 101;
+    int ID_CONTEXT_MENU_DELETE = 102;
+
+    int ID_OPTIONS_MENU_ADD = 201;
 
     String GENERAL_DATE_FORMAT = "EEE MMM dd, yyyy";
     String PRESCRIPTION_DETAILS_DATE_FORMAT = "dd MMMM yyyy";

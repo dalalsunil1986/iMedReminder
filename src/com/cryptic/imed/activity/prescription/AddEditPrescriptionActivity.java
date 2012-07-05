@@ -126,13 +126,13 @@ public class AddEditPrescriptionActivity extends RoboActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v == pickDoctorView) {
-            menu.add(Menu.NONE, Constants.CONTEXT_MENU_DELETE, Menu.NONE, remove);
+            menu.add(Menu.NONE, Constants.ID_CONTEXT_MENU_DELETE, Menu.NONE, remove);
         }
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        if (item.getItemId() == Constants.CONTEXT_MENU_DELETE) {
+        if (item.getItemId() == Constants.ID_CONTEXT_MENU_DELETE) {
             prescription.setPrescribedBy(null);
             pickDoctorView.setText(tapToSelectDoctor);
             return true;

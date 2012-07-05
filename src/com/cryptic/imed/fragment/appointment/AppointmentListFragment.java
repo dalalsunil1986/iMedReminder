@@ -23,6 +23,7 @@ import com.cryptic.imed.util.adapter.TextWatcherAdapter;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.DualPaneUtils;
 import com.cryptic.imed.util.view.TwoLineListItemView;
+import com.cryptic.imed.util.view.ViewUtils;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboListFragment;
@@ -128,8 +129,8 @@ public class AppointmentListFragment extends RoboListFragment {
         Appointment selectedAppointment = (Appointment) getListAdapter().getItem(info.position);
 
         menu.setHeaderTitle(selectedAppointment.getTitle());
-        menu.add(Menu.NONE, Constants.CONTEXT_MENU_EDIT, 0, edit);
-        menu.add(Menu.NONE, Constants.CONTEXT_MENU_DELETE, 1, delete);
+        menu.add(Menu.NONE, Constants.ID_CONTEXT_MENU_EDIT, 0, edit);
+        menu.add(Menu.NONE, Constants.ID_CONTEXT_MENU_DELETE, 1, delete);
     }
 
     @Override
@@ -138,12 +139,12 @@ public class AppointmentListFragment extends RoboListFragment {
         Appointment selectedAppointment = (Appointment) getListAdapter().getItem(info.position);
 
         switch (item.getItemId()) {
-            case Constants.CONTEXT_MENU_EDIT:
+            case Constants.ID_CONTEXT_MENU_EDIT:
                 Intent intent = new Intent(application, AddEditAppointmentActivity.class);
                 intent.putExtra(KEY_APPOINTMENT, selectedAppointment);
                 startActivity(intent);
                 return true;
-            case Constants.CONTEXT_MENU_DELETE:
+            case Constants.ID_CONTEXT_MENU_DELETE:
                 deleteAppointmentAndUpdateView(selectedAppointment);
                 return true;
         }
@@ -180,13 +181,13 @@ public class AppointmentListFragment extends RoboListFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.appointment_list_options_menu, menu);
+        ViewUtils.addNewEntityMenuItem(menu, R.string.new_appointment);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_new_appointment:
+            case Constants.ID_OPTIONS_MENU_ADD:
                 startActivity(new Intent(application, AddEditAppointmentActivity.class));
                 break;
             case android.R.id.home:

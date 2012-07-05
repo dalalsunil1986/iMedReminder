@@ -24,6 +24,7 @@ import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.DualPaneUtils;
 import com.cryptic.imed.util.view.TwoLineListItemWithImageView;
+import com.cryptic.imed.util.view.ViewUtils;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboListFragment;
@@ -131,8 +132,8 @@ public class DoctorListFragment extends RoboListFragment {
         Doctor selectedDoctor = (Doctor) getListAdapter().getItem(info.position);
 
         menu.setHeaderTitle(selectedDoctor.getName());
-        menu.add(Menu.NONE, Constants.CONTEXT_MENU_EDIT, 0, edit);
-        menu.add(Menu.NONE, Constants.CONTEXT_MENU_DELETE, 1, delete);
+        menu.add(Menu.NONE, Constants.ID_CONTEXT_MENU_EDIT, 0, edit);
+        menu.add(Menu.NONE, Constants.ID_CONTEXT_MENU_DELETE, 1, delete);
     }
 
     @Override
@@ -141,12 +142,12 @@ public class DoctorListFragment extends RoboListFragment {
         Doctor selectedDoctor = (Doctor) getListAdapter().getItem(info.position);
 
         switch (item.getItemId()) {
-            case Constants.CONTEXT_MENU_EDIT:
+            case Constants.ID_CONTEXT_MENU_EDIT:
                 Intent intent = new Intent(application, AddEditDoctorActivity.class);
                 intent.putExtra(KEY_DOCTOR, selectedDoctor);
                 startActivity(intent);
                 return true;
-            case Constants.CONTEXT_MENU_DELETE:
+            case Constants.ID_CONTEXT_MENU_DELETE:
                 deleteDoctorAndUpdateView(selectedDoctor);
                 return true;
         }
@@ -184,13 +185,13 @@ public class DoctorListFragment extends RoboListFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.doctor_list_options_menu, menu);
+        ViewUtils.addNewEntityMenuItem(menu, R.string.new_doctor);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_new_doctor:
+            case Constants.ID_OPTIONS_MENU_ADD:
                 startActivity(new Intent(application, AddEditDoctorActivity.class));
                 break;
             case android.R.id.home:

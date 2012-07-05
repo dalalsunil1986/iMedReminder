@@ -25,6 +25,7 @@ import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.DualPaneUtils;
 import com.cryptic.imed.util.view.TwoLineListItemWithImageView;
+import com.cryptic.imed.util.view.ViewUtils;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboListFragment;
@@ -134,8 +135,8 @@ public class MedicineListFragment extends RoboListFragment {
         Medicine selectedMedicine = (Medicine) getListAdapter().getItem(info.position);
 
         menu.setHeaderTitle(selectedMedicine.getName());
-        menu.add(Menu.NONE, Constants.CONTEXT_MENU_EDIT, 0, edit);
-        menu.add(Menu.NONE, Constants.CONTEXT_MENU_DELETE, 1, delete);
+        menu.add(Menu.NONE, Constants.ID_CONTEXT_MENU_EDIT, 0, edit);
+        menu.add(Menu.NONE, Constants.ID_CONTEXT_MENU_DELETE, 1, delete);
     }
 
     @Override
@@ -144,12 +145,12 @@ public class MedicineListFragment extends RoboListFragment {
         Medicine selectedMedicine = (Medicine) getListAdapter().getItem(info.position);
 
         switch (item.getItemId()) {
-            case Constants.CONTEXT_MENU_EDIT:
+            case Constants.ID_CONTEXT_MENU_EDIT:
                 Intent intent = new Intent(application, AddEditMedicineActivity.class);
                 intent.putExtra(KEY_MEDICINE, selectedMedicine);
                 startActivity(intent);
                 return true;
-            case Constants.CONTEXT_MENU_DELETE:
+            case Constants.ID_CONTEXT_MENU_DELETE:
                 deleteMedicineAndUpdateView(selectedMedicine);
                 return true;
         }
@@ -187,13 +188,13 @@ public class MedicineListFragment extends RoboListFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.medicine_list_options_menu, menu);
+        ViewUtils.addNewEntityMenuItem(menu, R.string.new_medicine);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_new_medicine:
+            case Constants.ID_OPTIONS_MENU_ADD:
                 startActivity(new Intent(application, AddEditMedicineActivity.class));
                 break;
             case android.R.id.home:
