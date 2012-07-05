@@ -178,7 +178,7 @@ public class MedicineScheduleActivity extends RoboActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = layoutInflater.inflate(R.layout.dosage_list_item, parent, false);
+                convertView = layoutInflater.inflate(R.layout.list_item_dosage, parent, false);
             }
 
             final TextView doseNoTextView = (TextView) convertView.findViewById(R.id.dose_no);

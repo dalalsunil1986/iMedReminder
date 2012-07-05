@@ -76,7 +76,7 @@ public class MedicineDetailsFragment extends RoboFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.medicine_details, container, false);
+        return inflater.inflate(R.layout.details_medicine, container, false);
     }
 
     @Override

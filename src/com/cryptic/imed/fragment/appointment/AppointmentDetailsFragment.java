@@ -100,7 +100,7 @@ public class AppointmentDetailsFragment extends RoboFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.appointment_details, container, false);
+        return inflater.inflate(R.layout.details_appointment, container, false);
     }
 
     @Override

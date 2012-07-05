@@ -289,7 +289,7 @@ public class AddEditMedicineActivity extends RoboActivity {
                 width (LinearLayout doesn't work either). Therefore, a custom layout has been used as list item.
                 c.f. https://groups.google.com/forum/?fromgroups#!topic/android-developers/Ylgekx-A2Xw
                  */
-                convertView = layoutInflater.inflate(R.layout.pick_med_photo_from_stock_list_item, parent, false);
+                convertView = layoutInflater.inflate(R.layout.list_item_pick_med_photo_from_stock, parent, false);
             }
 
             TextView textView = (TextView) convertView.findViewById(R.id.text);

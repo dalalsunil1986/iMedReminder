@@ -242,7 +242,7 @@ public class AddEditPrescriptionActivity extends RoboActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = layoutInflater.inflate(R.layout.prescription_medicine_list_item, parent, false);
+                convertView = layoutInflater.inflate(R.layout.list_item_prescription_medicine, parent, false);
             }
 
             ImageView imageView = (ImageView) convertView.findViewById(R.id.image);
