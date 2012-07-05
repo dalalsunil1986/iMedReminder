@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -21,6 +20,7 @@ import com.cryptic.imed.domain.Medicine;
 import com.cryptic.imed.util.StringUtils;
 import com.cryptic.imed.util.adapter.Filterable;
 import com.cryptic.imed.util.adapter.FilterableArrayAdapter;
+import com.cryptic.imed.util.adapter.TextWatcherAdapter;
 import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.DualPaneUtils;
@@ -74,17 +74,7 @@ public class MedicineListFragment extends RoboListFragment {
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         EditText filterInput = (EditText) getActivity().findViewById(R.id.filter_input);
-        filterInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //ignore
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //ignore
-            }
-
+        filterInput.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void afterTextChanged(Editable s) {
                 ((MedicineListAdapter) getListAdapter()).getFilter().filter(s, new Filter.FilterListener() {

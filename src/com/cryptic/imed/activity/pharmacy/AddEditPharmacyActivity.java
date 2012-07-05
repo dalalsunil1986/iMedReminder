@@ -11,9 +11,7 @@ import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.domain.Pharmacy;
 import com.cryptic.imed.fragment.pharmacy.PharmacyListFragment;
 import com.cryptic.imed.util.Validation;
-import com.cryptic.imed.util.photo.camera.PhotoTaker;
 import com.cryptic.imed.util.view.CompatibilityUtils;
-import com.google.inject.Inject;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
@@ -28,9 +26,6 @@ import java.io.Serializable;
 @ContentView(R.layout.new_pharmacy)
 public class AddEditPharmacyActivity extends RoboActivity {
     private final RuntimeExceptionDao<Pharmacy, Integer> pharmacyDao;
-
-    @Inject
-    private PhotoTaker photoTaker;
 
     @InjectView(R.id.pharmacy_name_input)
     private EditText pharmacyNameInput;
