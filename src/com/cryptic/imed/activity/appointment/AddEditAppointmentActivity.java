@@ -1,7 +1,6 @@
 package com.cryptic.imed.activity.appointment;
 
 import android.app.Application;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -22,6 +21,7 @@ import com.cryptic.imed.fragment.appointment.AppointmentListFragment;
 import com.cryptic.imed.util.StringUtils;
 import com.cryptic.imed.util.Validation;
 import com.cryptic.imed.util.view.CompatibilityUtils;
+import com.cryptic.imed.util.view.DateTimePickerDialog;
 import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
@@ -66,7 +66,7 @@ public class AddEditAppointmentActivity extends RoboActivity {
     @InjectResource(R.string.tap_to_select_x)
     private String tapToSelect;
 
-    private DatePickerDialog datePickerDialog;
+    private DateTimePickerDialog dateTimePickerDialog;
     private Appointment appointment;
 
     @Override
@@ -156,14 +156,16 @@ public class AddEditAppointmentActivity extends RoboActivity {
     private void prepareDateTimePickerDialog() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(appointment.getTime());
-        datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+        dateTimePickerDialog = new DateTimePickerDialog(this, new DateTimePickerDialog.OnDateTimeSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Date selectedDate = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
+            public void onDateTimeSet(DatePicker datePickerView, TimePicker timePickerView,
+                                      int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute) {
+                Date selectedDate = new GregorianCalendar(year, monthOfYear, dayOfMonth, hourOfDay, minute).getTime();
                 appointment.setTime(selectedDate);
-                startDateBtn.setText(DateFormat.format(Constants.GENERAL_DATE_FORMAT, selectedDate));
+                startDateBtn.setText(DateFormat.format(Constants.GENERAL_DATE_TIME_FORMAT, selectedDate));
             }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
     }
 
     @Override
@@ -178,7 +180,7 @@ public class AddEditAppointmentActivity extends RoboActivity {
     }
 
     public void onStartDateButtonClicked(View view) {
-        datePickerDialog.show();
+        dateTimePickerDialog.show();
     }
 
     public void onSelectAppointmentWithSubjectClicked(View view) {
