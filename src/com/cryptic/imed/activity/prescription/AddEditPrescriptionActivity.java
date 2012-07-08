@@ -9,20 +9,17 @@ import android.view.*;
 import android.widget.*;
 import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
-import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
+import com.cryptic.imed.controller.PrescriptionController;
 import com.cryptic.imed.domain.Doctor;
-import com.cryptic.imed.domain.Dosage;
 import com.cryptic.imed.domain.Prescription;
 import com.cryptic.imed.domain.PrescriptionMedicine;
 import com.cryptic.imed.fragment.prescription.PrescriptionListFragment;
+import com.cryptic.imed.util.Validation;
 import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
-import com.cryptic.imed.util.Validation;
 import com.cryptic.imed.util.view.ViewUtils;
 import com.google.inject.Inject;
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectResource;
@@ -41,15 +38,12 @@ public class AddEditPrescriptionActivity extends RoboActivity {
     private static final int REQ_CODE_PICK_DOCTOR = 1;
     private static final int REQ_CODE_ADD_MEDICINE = 2;
 
-    private final RuntimeExceptionDao<Prescription, Integer> prescriptionDao;
-    private final RuntimeExceptionDao<PrescriptionMedicine, Integer> prescriptionMedicineDao;
-    private final RuntimeExceptionDao<Doctor, Integer> doctorDao;
-    private final RuntimeExceptionDao<Dosage, Integer> dosageDao;
-
     @Inject
     private Application application;
     @Inject
     private LayoutInflater layoutInflater;
+    @Inject
+    private PrescriptionController prescriptionController;
 
     @InjectView(R.id.title_input)
     private EditText titleInput;
@@ -79,15 +73,6 @@ public class AddEditPrescriptionActivity extends RoboActivity {
 
     private Prescription prescription;
 
-    public AddEditPrescriptionActivity() {
-        OrmLiteSqliteOpenHelper dbHelper = DbHelper.getHelper();
-
-        prescriptionDao = dbHelper.getRuntimeExceptionDao(Prescription.class);
-        prescriptionMedicineDao = dbHelper.getRuntimeExceptionDao(PrescriptionMedicine.class);
-        doctorDao = dbHelper.getRuntimeExceptionDao(Doctor.class);
-        dosageDao = dbHelper.getRuntimeExceptionDao(Dosage.class);
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,8 +97,8 @@ public class AddEditPrescriptionActivity extends RoboActivity {
     }
 
     private void updateViewWithPrescriptionDetails() {
-        prescriptionDao.refresh(prescription);
-        doctorDao.refresh(prescription.getPrescribedBy());
+        prescriptionController.refresh(prescription);
+        prescriptionController.refresh(prescription.getPrescribedBy());
 
         titleInput.setText(prescription.getTitle());
         detailsInput.setText(prescription.getDetails());
@@ -194,43 +179,21 @@ public class AddEditPrescriptionActivity extends RoboActivity {
     }
 
     private void savePrescription() {
-        prescriptionMedicineDao.delete(prescription.getMedicines());
-
         prescription.setTitle(titleInput.getText().toString());
         prescription.setDetails(detailsInput.getText().toString());
 
-        prescriptionDao.createOrUpdate(prescription);
-        savePrescriptionMedicines();
-    }
-
-    private void savePrescriptionMedicines() {
-        for (PrescriptionMedicine prescriptionMedicine : prescription.getMedicines()) {
-            prescriptionMedicineDao.createOrUpdate(prescriptionMedicine);
-            saveDosageReminders(prescriptionMedicine);
-        }
-    }
-
-    private void saveDosageReminders(PrescriptionMedicine prescriptionMedicine) {
-        for (Dosage dosage : prescriptionMedicine.getDosageReminders()) {
-            dosageDao.createOrUpdate(dosage);
-        }
+        prescriptionController.save(prescription);
     }
 
     public void onCancelButtonClicked(View view) {
         finish();
     }
 
-    private void removePrescriptionMedicine(PrescriptionMedicine prescriptionMedicine) {
-        prescriptionMedicineDao.delete(prescriptionMedicine);
+    private void removePrescriptionMedicineAndUpdateView(PrescriptionMedicine prescriptionMedicine) {
+        prescriptionController.delete(prescriptionMedicine);
         prescription.getMedicines().remove(prescriptionMedicine);
         ((PrescriptionMedicineListAdapter) medicineListView.getAdapter()).notifyDataSetInvalidated();
         ViewUtils.setListViewHeightBasedOnChildren(medicineListView);
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        DbHelper.release();
     }
 
 
@@ -268,7 +231,7 @@ public class AddEditPrescriptionActivity extends RoboActivity {
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    removePrescriptionMedicine(prescriptionMedicine);
+                    removePrescriptionMedicineAndUpdateView(prescriptionMedicine);
                 }
             });
 

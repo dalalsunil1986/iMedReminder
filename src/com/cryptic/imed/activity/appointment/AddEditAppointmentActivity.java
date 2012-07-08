@@ -11,8 +11,8 @@ import android.widget.*;
 import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.activity.prescription.PickDoctorActivity;
-import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
+import com.cryptic.imed.controller.AppointmentController;
 import com.cryptic.imed.domain.Appointment;
 import com.cryptic.imed.domain.Doctor;
 import com.cryptic.imed.domain.Pharmacy;
@@ -23,7 +23,6 @@ import com.cryptic.imed.util.StringUtils;
 import com.cryptic.imed.util.Validation;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.google.inject.Inject;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectResource;
@@ -42,12 +41,10 @@ public class AddEditAppointmentActivity extends RoboActivity {
     private static final int REQ_CODE_PICK_DOCTOR = 1;
     private static final int REQ_CODE_PICK_PHARMACY = 2;
 
-    private final RuntimeExceptionDao<Appointment, Integer> appointmentDao;
-    private final RuntimeExceptionDao<Doctor, Integer> doctorDao;
-    private final RuntimeExceptionDao<Pharmacy, Integer> pharmacyDao;
-
     @Inject
     private Application application;
+    @Inject
+    private AppointmentController appointmentController;
 
     @InjectView(R.id.appointment_title_input)
     private EditText titleInput;
@@ -71,12 +68,6 @@ public class AddEditAppointmentActivity extends RoboActivity {
 
     private DatePickerDialog datePickerDialog;
     private Appointment appointment;
-
-    public AddEditAppointmentActivity() {
-        appointmentDao = DbHelper.getHelper().getRuntimeExceptionDao(Appointment.class);
-        doctorDao = DbHelper.getHelper().getRuntimeExceptionDao(Doctor.class);
-        pharmacyDao = DbHelper.getHelper().getRuntimeExceptionDao(Pharmacy.class);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,10 +105,10 @@ public class AddEditAppointmentActivity extends RoboActivity {
                 .getPosition(appointment.getTimeIntervalUnit()));
 
         if (appointment.getDoctor() != null) {
-            doctorDao.refresh(appointment.getDoctor());
+            appointmentController.refresh(appointment.getDoctor());
             pickSubjectView.setText(appointment.getDoctor().getName());
         } else if (appointment.getPharmacy() != null) {
-            pharmacyDao.refresh(appointment.getPharmacy());
+            appointmentController.refresh(appointment.getPharmacy());
             pickSubjectView.setText(appointment.getPharmacy().getName());
         } else {
             pickSubjectView.setText(String.format(tapToSelect, appointment.getAppointmentType()));
@@ -243,16 +234,10 @@ public class AddEditAppointmentActivity extends RoboActivity {
         appointment.setRemindBefore(StringUtils.parseFloat(reminderOffsetInput));
         appointment.setTimeIntervalUnit((TimeIntervalUnit) reminderIntervalTypeInput.getSelectedItem());
 
-        appointmentDao.createOrUpdate(appointment);
+        appointmentController.save(appointment);
     }
 
     public void onCancelButtonClicked(View view) {
         finish();
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        DbHelper.release();
     }
 }

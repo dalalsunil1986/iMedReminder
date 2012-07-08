@@ -13,9 +13,8 @@ import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.activity.prescription.AddEditPrescriptionActivity;
 import com.cryptic.imed.activity.prescription.PrescriptionListActivity;
-import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
-import com.cryptic.imed.domain.Doctor;
+import com.cryptic.imed.controller.PrescriptionController;
 import com.cryptic.imed.domain.Prescription;
 import com.cryptic.imed.domain.PrescriptionMedicine;
 import com.cryptic.imed.util.photo.util.ImageUtils;
@@ -23,8 +22,6 @@ import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.DualPaneUtils;
 import com.cryptic.imed.util.view.TwoLineListItemWithImageView;
 import com.google.inject.Inject;
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectResource;
@@ -37,13 +34,12 @@ import java.util.ArrayList;
  * @author sharafat
  */
 public class PrescriptionDetailsFragment extends RoboFragment {
-    private final RuntimeExceptionDao<Prescription, Integer> prescriptionDao;
-    private final RuntimeExceptionDao<Doctor, Integer> doctorDao;
-
     @Inject
     private Application application;
     @Inject
     private LayoutInflater layoutInflater;
+    @Inject
+    private PrescriptionController prescriptionController;
 
     @InjectFragment(R.id.list_container)
     @Nullable
@@ -78,13 +74,6 @@ public class PrescriptionDetailsFragment extends RoboFragment {
     private boolean dualPanel;
     private Prescription prescription;
 
-    public PrescriptionDetailsFragment() {
-        OrmLiteSqliteOpenHelper dbHelper = DbHelper.getHelper();
-
-        prescriptionDao = dbHelper.getRuntimeExceptionDao(Prescription.class);
-        doctorDao = dbHelper.getRuntimeExceptionDao(Doctor.class);
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -113,14 +102,14 @@ public class PrescriptionDetailsFragment extends RoboFragment {
                     DateFormat.format(Constants.PRESCRIPTION_DETAILS_DATE_FORMAT, prescription.getIssueDate()));
 
             if (prescription.getPrescribedBy() != null) {
-                doctorDao.refresh(prescription.getPrescribedBy());
+                prescriptionController.refresh(prescription.getPrescribedBy());
                 prescribedByTextView.setText(prescription.getPrescribedBy().getName());
                 prescribedByTextView.setVisibility(View.VISIBLE);
             } else {
                 prescribedByTextView.setVisibility(View.GONE);
             }
 
-            prescriptionDao.refresh(prescription);
+            prescriptionController.refresh(prescription);
             prescription.setMedicines(new ArrayList<PrescriptionMedicine>(prescription.getMedicines()));
 
             if (prescription.getMedicines().size() > 0) {
@@ -169,7 +158,7 @@ public class PrescriptionDetailsFragment extends RoboFragment {
                     assert prescriptionListFragment != null;
                     prescriptionListFragment.deletePrescriptionAndUpdateView(prescription);
                 } else {
-                    prescriptionDao.delete(prescription);
+                    prescriptionController.delete(prescription);
 
                     Intent prescriptionListActivityIntent = new Intent(application, PrescriptionListActivity.class);
                     startActivity(prescriptionListActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -182,12 +171,6 @@ public class PrescriptionDetailsFragment extends RoboFragment {
         }
 
         return false;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        DbHelper.release();
     }
 
     public void setPrescription(Prescription prescription) {

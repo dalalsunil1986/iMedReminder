@@ -50,7 +50,7 @@
                       android:layout_height="wrap_content"
                       android:text="@string/details"/>
 
-            <EditText android:id="@+id/notes_input"
+            <EditText android:id="@+id/details_input"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:gravity="top"

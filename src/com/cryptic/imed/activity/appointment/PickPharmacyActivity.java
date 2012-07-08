@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import com.cryptic.imed.R;
-import com.cryptic.imed.app.DbHelper;
+import com.cryptic.imed.controller.PharmacyController;
 import com.cryptic.imed.domain.Pharmacy;
 import com.cryptic.imed.util.adapter.Filterable;
 import com.cryptic.imed.util.adapter.FilterableArrayAdapter;
@@ -19,7 +19,6 @@ import com.cryptic.imed.util.adapter.TextWatcherAdapter;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.TwoLineListItemView;
 import com.google.inject.Inject;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -37,6 +36,8 @@ public class PickPharmacyActivity extends RoboActivity {
     private Application application;
     @Inject
     private LayoutInflater layoutInflater;
+    @Inject
+    private PharmacyController pharmacyController;
 
     @InjectView(R.id.list_container)
     private LinearLayout linearLayout;
@@ -76,10 +77,7 @@ public class PickPharmacyActivity extends RoboActivity {
         PharmacyListAdapter() {
             super(application, 0);
 
-            RuntimeExceptionDao<Pharmacy, Integer> pharmacyDao =
-                    DbHelper.getHelper().getRuntimeExceptionDao(Pharmacy.class);
-
-            addAll(pharmacyDao.queryForEq("deleted", false));
+            addAll(pharmacyController.findByDeleted(false));
 
             sort(new Comparator<Filterable>() {
                 @Override
@@ -87,8 +85,6 @@ public class PickPharmacyActivity extends RoboActivity {
                     return ((Pharmacy) lhs).getName().compareTo(((Pharmacy) rhs).getName());
                 }
             });
-
-            DbHelper.release();
         }
 
         @Override

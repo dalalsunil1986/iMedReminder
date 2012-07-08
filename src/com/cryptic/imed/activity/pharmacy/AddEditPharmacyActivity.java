@@ -7,12 +7,12 @@ import android.view.View;
 import android.widget.EditText;
 import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
-import com.cryptic.imed.app.DbHelper;
+import com.cryptic.imed.controller.PharmacyController;
 import com.cryptic.imed.domain.Pharmacy;
 import com.cryptic.imed.fragment.pharmacy.PharmacyListFragment;
 import com.cryptic.imed.util.Validation;
 import com.cryptic.imed.util.view.CompatibilityUtils;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectResource;
@@ -25,7 +25,8 @@ import java.io.Serializable;
  */
 @ContentView(R.layout.new_pharmacy)
 public class AddEditPharmacyActivity extends RoboActivity {
-    private final RuntimeExceptionDao<Pharmacy, Integer> pharmacyDao;
+    @Inject
+    private PharmacyController pharmacyController;
 
     @InjectView(R.id.pharmacy_name_input)
     private EditText pharmacyNameInput;
@@ -48,10 +49,6 @@ public class AddEditPharmacyActivity extends RoboActivity {
     private String invalidUrl;
 
     private Pharmacy pharmacy;
-
-    public AddEditPharmacyActivity() {
-        pharmacyDao = DbHelper.getHelper().getRuntimeExceptionDao(Pharmacy.class);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,16 +109,10 @@ public class AddEditPharmacyActivity extends RoboActivity {
         pharmacy.setWebsite(pharmacyWebsiteInput.getText().toString());
         pharmacy.setNotes(notesInput.getText().toString());
 
-        pharmacyDao.createOrUpdate(pharmacy);
+        pharmacyController.save(pharmacy);
     }
 
     public void onCancelButtonClicked(View view) {
         finish();
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        DbHelper.release();
     }
 }

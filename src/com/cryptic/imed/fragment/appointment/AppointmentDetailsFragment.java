@@ -12,17 +12,14 @@ import com.cryptic.imed.activity.appointment.AddEditAppointmentActivity;
 import com.cryptic.imed.activity.appointment.AppointmentListActivity;
 import com.cryptic.imed.activity.doctor.DoctorDetailsActivity;
 import com.cryptic.imed.activity.pharmacy.PharmacyDetailsActivity;
-import com.cryptic.imed.app.DbHelper;
+import com.cryptic.imed.controller.AppointmentController;
 import com.cryptic.imed.domain.Appointment;
-import com.cryptic.imed.domain.Doctor;
-import com.cryptic.imed.domain.Pharmacy;
 import com.cryptic.imed.fragment.doctor.DoctorListFragment;
 import com.cryptic.imed.fragment.pharmacy.PharmacyListFragment;
 import com.cryptic.imed.util.StringUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.DualPaneUtils;
 import com.google.inject.Inject;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectResource;
@@ -34,12 +31,10 @@ import javax.annotation.Nullable;
  * @author sharafat
  */
 public class AppointmentDetailsFragment extends RoboFragment {
-    private final RuntimeExceptionDao<Appointment, Integer> appointmentDao;
-    private final RuntimeExceptionDao<Doctor, Integer> doctorDao;
-    private final RuntimeExceptionDao<Pharmacy, Integer> pharmacyDao;
-
     @Inject
     private Application application;
+    @Inject
+    private AppointmentController appointmentController;
 
     @InjectFragment(R.id.list_container)
     @Nullable
@@ -63,12 +58,6 @@ public class AppointmentDetailsFragment extends RoboFragment {
 
     private boolean dualPanel;
     private Appointment appointment;
-
-    public AppointmentDetailsFragment() {
-        appointmentDao = DbHelper.getHelper().getRuntimeExceptionDao(Appointment.class);
-        doctorDao = DbHelper.getHelper().getRuntimeExceptionDao(Doctor.class);
-        pharmacyDao = DbHelper.getHelper().getRuntimeExceptionDao(Pharmacy.class);
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -117,11 +106,11 @@ public class AppointmentDetailsFragment extends RoboFragment {
             remindBeforeTextView.setText(getRemindBeforeText());
 
             if (appointment.getDoctor() != null) {
-                doctorDao.refresh(appointment.getDoctor());
+                appointmentController.refresh(appointment.getDoctor());
                 appointmentWithTextView.setText(appointment.getDoctor().getName());
                 updateAppointmentWithTextViewToIndicateClickability();
             } else if (appointment.getPharmacy() != null) {
-                pharmacyDao.refresh(appointment.getPharmacy());
+                appointmentController.refresh(appointment.getPharmacy());
                 appointmentWithTextView.setText(appointment.getPharmacy().getName());
                 updateAppointmentWithTextViewToIndicateClickability();
             } else {
@@ -170,7 +159,7 @@ public class AppointmentDetailsFragment extends RoboFragment {
                     assert appointmentListFragment != null;
                     appointmentListFragment.deleteAppointmentAndUpdateView(appointment);
                 } else {
-                    appointmentDao.delete(appointment);
+                    appointmentController.delete(appointment);
 
                     Intent appointmentListActivityIntent = new Intent(application, AppointmentListActivity.class);
                     startActivity(appointmentListActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -183,12 +172,6 @@ public class AppointmentDetailsFragment extends RoboFragment {
         }
 
         return false;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        DbHelper.release();
     }
 
     public void setAppointment(Appointment appointment) {

@@ -12,14 +12,13 @@ import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.activity.medicine.AddEditMedicineActivity;
 import com.cryptic.imed.activity.medicine.MedicineListActivity;
-import com.cryptic.imed.app.DbHelper;
+import com.cryptic.imed.controller.MedicineController;
 import com.cryptic.imed.domain.Medicine;
 import com.cryptic.imed.util.StringUtils;
 import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.DualPaneUtils;
 import com.google.inject.Inject;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectResource;
@@ -31,10 +30,10 @@ import javax.annotation.Nullable;
  * @author sharafat
  */
 public class MedicineDetailsFragment extends RoboFragment {
-    private final RuntimeExceptionDao<Medicine, Integer> medicineDao;
-
     @Inject
     private Application application;
+    @Inject
+    private MedicineController medicineController;
 
     @InjectFragment(R.id.list_container)
     @Nullable
@@ -60,10 +59,6 @@ public class MedicineDetailsFragment extends RoboFragment {
 
     private boolean dualPanel;
     private Medicine medicine;
-
-    public MedicineDetailsFragment() {
-        medicineDao = DbHelper.getHelper().getRuntimeExceptionDao(Medicine.class);
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -120,7 +115,7 @@ public class MedicineDetailsFragment extends RoboFragment {
                     medicineListFragment.deleteMedicineAndUpdateView(medicine);
                 } else {
                     medicine.setDeleted(true);
-                    medicineDao.update(medicine);
+                    medicineController.save(medicine);
 
                     Intent medicineListActivityIntent = new Intent(application, MedicineListActivity.class);
                     startActivity(medicineListActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -133,12 +128,6 @@ public class MedicineDetailsFragment extends RoboFragment {
         }
 
         return false;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        DbHelper.release();
     }
 
     public void setMedicine(Medicine medicine) {

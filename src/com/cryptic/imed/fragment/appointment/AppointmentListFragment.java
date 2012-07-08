@@ -14,8 +14,8 @@ import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.activity.appointment.AddEditAppointmentActivity;
 import com.cryptic.imed.activity.appointment.AppointmentDetailsActivity;
-import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
+import com.cryptic.imed.controller.AppointmentController;
 import com.cryptic.imed.domain.Appointment;
 import com.cryptic.imed.util.adapter.Filterable;
 import com.cryptic.imed.util.adapter.FilterableArrayAdapter;
@@ -25,7 +25,6 @@ import com.cryptic.imed.util.view.DualPaneUtils;
 import com.cryptic.imed.util.view.TwoLineListItemView;
 import com.cryptic.imed.util.view.ViewUtils;
 import com.google.inject.Inject;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectResource;
@@ -39,12 +38,12 @@ import java.util.Comparator;
 public class AppointmentListFragment extends RoboListFragment {
     public static final String KEY_APPOINTMENT = "appointment";
 
-    private final RuntimeExceptionDao<Appointment, Integer> appointmentDao;
-
     @Inject
     private Application application;
     @Inject
     private LayoutInflater layoutInflater;
+    @Inject
+    private AppointmentController appointmentController;
 
     @InjectFragment(R.id.details_container)
     @Nullable
@@ -56,10 +55,6 @@ public class AppointmentListFragment extends RoboListFragment {
     private String delete;
 
     private boolean dualPane;
-
-    public AppointmentListFragment() {
-        appointmentDao = DbHelper.getHelper().getRuntimeExceptionDao(Appointment.class);
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -153,7 +148,7 @@ public class AppointmentListFragment extends RoboListFragment {
     }
 
     public void deleteAppointmentAndUpdateView(Appointment appointment) {
-        deleteAppointment(appointment);
+        appointmentController.delete(appointment);
         int selectedAppointmentIndex = updateAppointmentList(appointment);
         if (dualPane) {
             try {
@@ -162,10 +157,6 @@ public class AppointmentListFragment extends RoboListFragment {
                 selectItemInList(selectedAppointmentIndex - 1);
             }
         }
-    }
-
-    private void deleteAppointment(Appointment appointment) {
-        appointmentDao.delete(appointment);
     }
 
     private int updateAppointmentList(Appointment selectedAppointment) {
@@ -212,18 +203,12 @@ public class AppointmentListFragment extends RoboListFragment {
         }
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        DbHelper.release();
-    }
-
 
     private class AppointmentListAdapter extends FilterableArrayAdapter {
         AppointmentListAdapter() {
             super(application, 0);
 
-            addAll(appointmentDao.queryForAll());
+            addAll(appointmentController.list());
 
             sort(new Comparator<Filterable>() {
                 @Override

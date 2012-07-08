@@ -13,8 +13,8 @@ import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.activity.pharmacy.AddEditPharmacyActivity;
 import com.cryptic.imed.activity.pharmacy.PharmacyDetailsActivity;
-import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
+import com.cryptic.imed.controller.PharmacyController;
 import com.cryptic.imed.domain.Pharmacy;
 import com.cryptic.imed.util.adapter.Filterable;
 import com.cryptic.imed.util.adapter.FilterableArrayAdapter;
@@ -24,7 +24,6 @@ import com.cryptic.imed.util.view.DualPaneUtils;
 import com.cryptic.imed.util.view.TwoLineListItemView;
 import com.cryptic.imed.util.view.ViewUtils;
 import com.google.inject.Inject;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectResource;
@@ -38,12 +37,12 @@ import java.util.Comparator;
 public class PharmacyListFragment extends RoboListFragment {
     public static final String KEY_PHARMACY = "pharmacy";
 
-    private final RuntimeExceptionDao<Pharmacy, Integer> pharmacyDao;
-
     @Inject
     private Application application;
     @Inject
     private LayoutInflater layoutInflater;
+    @Inject
+    private PharmacyController pharmacyController;
 
     @InjectFragment(R.id.details_container)
     @Nullable
@@ -55,10 +54,6 @@ public class PharmacyListFragment extends RoboListFragment {
     private String delete;
 
     private boolean dualPane;
-
-    public PharmacyListFragment() {
-        pharmacyDao = DbHelper.getHelper().getRuntimeExceptionDao(Pharmacy.class);
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -165,7 +160,7 @@ public class PharmacyListFragment extends RoboListFragment {
 
     private void deletePharmacy(Pharmacy pharmacy) {
         pharmacy.setDeleted(true);
-        pharmacyDao.update(pharmacy);
+        pharmacyController.save(pharmacy);
     }
 
     private int updatePharmacyList(Pharmacy selectedPharmacy) {
@@ -212,18 +207,12 @@ public class PharmacyListFragment extends RoboListFragment {
         }
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        DbHelper.release();
-    }
-
 
     private class PharmacyListAdapter extends FilterableArrayAdapter {
         PharmacyListAdapter() {
             super(application, 0);
 
-            addAll(pharmacyDao.queryForEq("deleted", false));
+            addAll(pharmacyController.findByDeleted(false));
 
             sort(new Comparator<Filterable>() {
                 @Override

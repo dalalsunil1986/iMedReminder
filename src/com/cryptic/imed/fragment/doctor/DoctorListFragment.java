@@ -14,8 +14,8 @@ import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.activity.doctor.AddEditDoctorActivity;
 import com.cryptic.imed.activity.doctor.DoctorDetailsActivity;
-import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
+import com.cryptic.imed.controller.DoctorController;
 import com.cryptic.imed.domain.Doctor;
 import com.cryptic.imed.util.adapter.Filterable;
 import com.cryptic.imed.util.adapter.FilterableArrayAdapter;
@@ -26,7 +26,6 @@ import com.cryptic.imed.util.view.DualPaneUtils;
 import com.cryptic.imed.util.view.TwoLineListItemWithImageView;
 import com.cryptic.imed.util.view.ViewUtils;
 import com.google.inject.Inject;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectResource;
@@ -40,12 +39,12 @@ import java.util.Comparator;
 public class DoctorListFragment extends RoboListFragment {
     public static final String KEY_DOCTOR = "doctor";
 
-    private final RuntimeExceptionDao<Doctor, Integer> doctorDao;
-
     @Inject
     private Application application;
     @Inject
     private LayoutInflater layoutInflater;
+    @Inject
+    private DoctorController doctorController;
 
     @InjectFragment(R.id.details_container)
     @Nullable
@@ -59,10 +58,6 @@ public class DoctorListFragment extends RoboListFragment {
     private Drawable defaultPhoto;
 
     private boolean dualPane;
-
-    public DoctorListFragment() {
-        doctorDao = DbHelper.getHelper().getRuntimeExceptionDao(Doctor.class);
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -169,7 +164,7 @@ public class DoctorListFragment extends RoboListFragment {
 
     private void deleteDoctor(Doctor selectedDoctor) {
         selectedDoctor.setDeleted(true);
-        doctorDao.update(selectedDoctor);
+        doctorController.save(selectedDoctor);
     }
 
     private int updateDoctorList(Doctor selectedDoctor) {
@@ -216,18 +211,12 @@ public class DoctorListFragment extends RoboListFragment {
         }
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        DbHelper.release();
-    }
-
 
     private class DoctorListAdapter extends FilterableArrayAdapter {
         DoctorListAdapter() {
             super(application, 0);
 
-            addAll(doctorDao.queryForEq("deleted", false));
+            addAll(doctorController.findByDeleted(false));
 
             sort(new Comparator<Filterable>() {
                 @Override

@@ -14,8 +14,8 @@ import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.activity.medicine.AddEditMedicineActivity;
 import com.cryptic.imed.activity.medicine.MedicineDetailsActivity;
-import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
+import com.cryptic.imed.controller.MedicineController;
 import com.cryptic.imed.domain.Medicine;
 import com.cryptic.imed.util.StringUtils;
 import com.cryptic.imed.util.adapter.Filterable;
@@ -27,7 +27,6 @@ import com.cryptic.imed.util.view.DualPaneUtils;
 import com.cryptic.imed.util.view.TwoLineListItemWithImageView;
 import com.cryptic.imed.util.view.ViewUtils;
 import com.google.inject.Inject;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectResource;
@@ -41,12 +40,12 @@ import java.util.Comparator;
 public class MedicineListFragment extends RoboListFragment {
     public static final String KEY_MEDICINE = "medicine";
 
-    private final RuntimeExceptionDao<Medicine, Integer> medicineDao;
-
     @Inject
     private Application application;
     @Inject
     private LayoutInflater layoutInflater;
+    @Inject
+    private MedicineController medicineController;
 
     @InjectFragment(R.id.details_container)
     @Nullable
@@ -62,10 +61,6 @@ public class MedicineListFragment extends RoboListFragment {
     private Drawable defaultMedicinePhoto;
 
     private boolean dualPane;
-
-    public MedicineListFragment() {
-        medicineDao = DbHelper.getHelper().getRuntimeExceptionDao(Medicine.class);
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -172,7 +167,7 @@ public class MedicineListFragment extends RoboListFragment {
 
     private void deleteMedicine(Medicine selectedMedicine) {
         selectedMedicine.setDeleted(true);
-        medicineDao.update(selectedMedicine);
+        medicineController.save(selectedMedicine);
     }
 
     private int updateMedicineList(Medicine selectedMedicine) {
@@ -219,18 +214,12 @@ public class MedicineListFragment extends RoboListFragment {
         }
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        DbHelper.release();
-    }
-
 
     private class MedicineListAdapter extends FilterableArrayAdapter {
         MedicineListAdapter() {
             super(application, 0);
 
-            addAll(medicineDao.queryForEq("deleted", false));
+            addAll(medicineController.findByDeleted(false));
 
             sort(new Comparator<Filterable>() {
                 @Override

@@ -10,13 +10,12 @@ import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.activity.pharmacy.AddEditPharmacyActivity;
 import com.cryptic.imed.activity.pharmacy.PharmacyListActivity;
-import com.cryptic.imed.app.DbHelper;
+import com.cryptic.imed.controller.PharmacyController;
 import com.cryptic.imed.domain.Pharmacy;
 import com.cryptic.imed.util.StringUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.cryptic.imed.util.view.DualPaneUtils;
 import com.google.inject.Inject;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectResource;
@@ -28,10 +27,10 @@ import javax.annotation.Nullable;
  * @author sharafat
  */
 public class PharmacyDetailsFragment extends RoboFragment {
-    private final RuntimeExceptionDao<Pharmacy, Integer> pharmacyDao;
-
     @Inject
     private Application application;
+    @Inject
+    private PharmacyController pharmacyController;
 
     @InjectFragment(R.id.list_container)
     @Nullable
@@ -57,10 +56,6 @@ public class PharmacyDetailsFragment extends RoboFragment {
 
     private boolean dualPanel;
     private Pharmacy pharmacy;
-
-    public PharmacyDetailsFragment() {
-        pharmacyDao = DbHelper.getHelper().getRuntimeExceptionDao(Pharmacy.class);
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -118,7 +113,7 @@ public class PharmacyDetailsFragment extends RoboFragment {
                     pharmacyListFragment.deletePharmacyAndUpdateView(pharmacy);
                 } else {
                     pharmacy.setDeleted(true);
-                    pharmacyDao.update(pharmacy);
+                    pharmacyController.save(pharmacy);
 
                     Intent pharmacyListActivityIntent = new Intent(application, PharmacyListActivity.class);
                     startActivity(pharmacyListActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -131,12 +126,6 @@ public class PharmacyDetailsFragment extends RoboFragment {
         }
 
         return false;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        DbHelper.release();
     }
 
     public void setPharmacy(Pharmacy pharmacy) {

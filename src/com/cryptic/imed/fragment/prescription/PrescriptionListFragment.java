@@ -14,8 +14,8 @@ import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
 import com.cryptic.imed.activity.prescription.AddEditPrescriptionActivity;
 import com.cryptic.imed.activity.prescription.PrescriptionDetailsActivity;
-import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
+import com.cryptic.imed.controller.PrescriptionController;
 import com.cryptic.imed.domain.Prescription;
 import com.cryptic.imed.util.adapter.Filterable;
 import com.cryptic.imed.util.adapter.FilterableArrayAdapter;
@@ -25,7 +25,6 @@ import com.cryptic.imed.util.view.DualPaneUtils;
 import com.cryptic.imed.util.view.TwoLineListItemView;
 import com.cryptic.imed.util.view.ViewUtils;
 import com.google.inject.Inject;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectResource;
@@ -39,12 +38,12 @@ import java.util.Comparator;
 public class PrescriptionListFragment extends RoboListFragment {
     public static final String KEY_PRESCRIPTION = "prescription";
 
-    private final RuntimeExceptionDao<Prescription, Integer> prescriptionDao;
-
     @Inject
     private Application application;
     @Inject
     private LayoutInflater layoutInflater;
+    @Inject
+    private PrescriptionController prescriptionController;
 
     @InjectFragment(R.id.details_container)
     @Nullable
@@ -58,10 +57,6 @@ public class PrescriptionListFragment extends RoboListFragment {
     private String addedOn;
 
     private boolean dualPane;
-
-    public PrescriptionListFragment() {
-        prescriptionDao = DbHelper.getHelper().getRuntimeExceptionDao(Prescription.class);
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -167,7 +162,7 @@ public class PrescriptionListFragment extends RoboListFragment {
     }
 
     private void deletePrescription(Prescription prescription) {
-        prescriptionDao.delete(prescription);
+        prescriptionController.delete(prescription);
     }
 
     private int updatePrescriptionList(Prescription selectedPrescription) {
@@ -214,18 +209,12 @@ public class PrescriptionListFragment extends RoboListFragment {
         }
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        DbHelper.release();
-    }
-
 
     private class PrescriptionListAdapter extends FilterableArrayAdapter {
         PrescriptionListAdapter() {
             super(application, 0);
 
-            addAll(prescriptionDao.queryForAll());
+            addAll(prescriptionController.list());
 
             sort(new Comparator<Filterable>() {
                 @Override

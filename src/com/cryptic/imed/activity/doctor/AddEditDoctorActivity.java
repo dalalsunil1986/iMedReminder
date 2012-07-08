@@ -12,18 +12,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
-import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
+import com.cryptic.imed.controller.DoctorController;
 import com.cryptic.imed.domain.Doctor;
 import com.cryptic.imed.fragment.doctor.DoctorListFragment;
+import com.cryptic.imed.util.Validation;
 import com.cryptic.imed.util.photo.camera.CameraUnavailableException;
 import com.cryptic.imed.util.photo.camera.OnPhotoTakeListener;
 import com.cryptic.imed.util.photo.camera.PhotoTaker;
 import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
-import com.cryptic.imed.util.Validation;
 import com.google.inject.Inject;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectResource;
@@ -36,8 +35,8 @@ import java.io.Serializable;
  */
 @ContentView(R.layout.new_doctor)
 public class AddEditDoctorActivity extends RoboActivity {
-    private final RuntimeExceptionDao<Doctor, Integer> doctorDao;
-
+    @Inject
+    private DoctorController doctorController;
     @Inject
     private PhotoTaker photoTaker;
 
@@ -73,10 +72,6 @@ public class AddEditDoctorActivity extends RoboActivity {
     private OnPhotoTakeListener onPhotoTakeListener;
 
     private Doctor doctor;
-
-    public AddEditDoctorActivity() {
-        doctorDao = DbHelper.getHelper().getRuntimeExceptionDao(Doctor.class);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -213,16 +208,10 @@ public class AddEditDoctorActivity extends RoboActivity {
         doctor.setWebsite(docWebsiteInput.getText().toString());
         doctor.setNotes(notesInput.getText().toString());
 
-        doctorDao.createOrUpdate(doctor);
+        doctorController.save(doctor);
     }
 
     public void onCancelButtonClicked(View view) {
         finish();
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        DbHelper.release();
     }
 }

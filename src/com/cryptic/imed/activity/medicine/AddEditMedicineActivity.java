@@ -12,10 +12,10 @@ import android.view.*;
 import android.widget.*;
 import com.cryptic.imed.R;
 import com.cryptic.imed.activity.DashboardActivity;
-import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
-import com.cryptic.imed.domain.enums.MedicationUnit;
+import com.cryptic.imed.controller.MedicineController;
 import com.cryptic.imed.domain.Medicine;
+import com.cryptic.imed.domain.enums.MedicationUnit;
 import com.cryptic.imed.domain.enums.MedicineType;
 import com.cryptic.imed.fragment.medicine.MedicineListFragment;
 import com.cryptic.imed.util.StringUtils;
@@ -26,7 +26,6 @@ import com.cryptic.imed.util.photo.camera.PhotoTaker;
 import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.CompatibilityUtils;
 import com.google.inject.Inject;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectResource;
@@ -39,12 +38,12 @@ import java.io.Serializable;
  */
 @ContentView(R.layout.new_medicine)
 public class AddEditMedicineActivity extends RoboActivity {
-    private final RuntimeExceptionDao<Medicine, Integer> medicineDao;
-
     @Inject
     private Application application;
     @Inject
     private LayoutInflater layoutInflater;
+    @Inject
+    private MedicineController medicineController;
     @Inject
     private PhotoTaker photoTaker;
 
@@ -52,7 +51,7 @@ public class AddEditMedicineActivity extends RoboActivity {
     private EditText medNameInput;
     @InjectView(R.id.take_photo_btn)
     private ImageButton takePhotoButton;
-    @InjectView(R.id.notes_input)
+    @InjectView(R.id.details_input)
     private EditText detailsInput;
     @InjectView(R.id.current_stock_input)
     private EditText currentStockInput;
@@ -75,10 +74,6 @@ public class AddEditMedicineActivity extends RoboActivity {
     private OnPhotoTakeListener onPhotoTakeListener;
 
     private Medicine medicine;
-
-    public AddEditMedicineActivity() {
-        medicineDao = DbHelper.getHelper().getRuntimeExceptionDao(Medicine.class);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -251,7 +246,7 @@ public class AddEditMedicineActivity extends RoboActivity {
         medicine.setCurrentStock(getCurrentStockFromUserInput());
         medicine.setMedicationUnit((MedicationUnit) medicationUnitSpinner.getSelectedItem());
 
-        medicineDao.createOrUpdate(medicine);
+        medicineController.save(medicine);
     }
 
     private float getCurrentStockFromUserInput() {
@@ -265,12 +260,6 @@ public class AddEditMedicineActivity extends RoboActivity {
 
     public void onCancelButtonClicked(View view) {
         finish();
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        DbHelper.release();
     }
 
 
