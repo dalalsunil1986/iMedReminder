@@ -51,6 +51,13 @@
             <artifactId>ormlite-android</artifactId>
             <version>${ormlite.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.jayway.android.robotium</groupId>
+            <artifactId>robotium-solo</artifactId>
+            <version>3.3</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>
