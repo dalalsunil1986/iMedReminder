@@ -114,6 +114,7 @@
                   android:label="@string/medicine_schedule"
                   android:windowSoftInputMode="stateHidden"
                   android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".activity.ScheduleActivity"/>
     </application>
 
 </manifest>

@@ -9,16 +9,12 @@ import com.cryptic.imed.activity.medicine.MedicineListActivity;
 import com.cryptic.imed.activity.pharmacy.PharmacyListActivity;
 import com.cryptic.imed.activity.prescription.PrescriptionListActivity;
 import com.cryptic.imed.util.view.IndefinitelyProgressingTask;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectResource;
 
 @ContentView(R.layout.dashboard)
 public class DashboardActivity extends RoboActivity {
-    private static final Logger log = LoggerFactory.getLogger(DashboardActivity.class);
-
     @InjectResource(R.string.loading)
     private String loadingMessage;
 
@@ -43,7 +39,7 @@ public class DashboardActivity extends RoboActivity {
     }
 
     public void onSchedulesClicked(View view) {
-        log.debug("Schedules clicked");
+        startActivity(ScheduleActivity.class);
     }
 
     private void startActivity(final Class<?> clazz) {
