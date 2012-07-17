@@ -3,9 +3,11 @@ package com.cryptic.imed.controller;
 import android.util.MonthDisplayHelper;
 import com.cryptic.imed.app.DbHelper;
 import com.cryptic.imed.common.Constants;
+import com.cryptic.imed.domain.Prescription;
 import com.cryptic.imed.domain.PrescriptionMedicine;
 import com.cryptic.imed.util.DateWithoutTime;
 import com.google.inject.Singleton;
+import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.dao.RawRowMapper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
@@ -26,9 +28,16 @@ public class ScheduleController {
     private static final Logger log = LoggerFactory.getLogger(ScheduleController.class);
 
     private final RuntimeExceptionDao<PrescriptionMedicine, Integer> prescriptionMedicineDao;
+    private final RuntimeExceptionDao<Prescription, Integer> prescriptionDao;
 
     public ScheduleController() {
-        prescriptionMedicineDao = DbHelper.getHelper().getRuntimeExceptionDao(PrescriptionMedicine.class);
+        OrmLiteSqliteOpenHelper dbHelper = DbHelper.getHelper();
+        prescriptionMedicineDao = dbHelper.getRuntimeExceptionDao(PrescriptionMedicine.class);
+        prescriptionDao = dbHelper.getRuntimeExceptionDao(Prescription.class);
+    }
+
+    public void refresh(Prescription prescription) {
+        prescriptionDao.refresh(prescription);
     }
 
     public Map<DateWithoutTime, List<PrescriptionMedicine>> list(int year, int month, int weekStartDay) {

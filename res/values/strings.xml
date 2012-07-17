@@ -161,4 +161,10 @@
     <string name="dose_no">Dose %d</string>
     <string name="must_be_greater_than_zero">Must be greater than 0</string>
     <string name="add_reminder_times">Add Reminder Times</string>
+
+
+    <!-- ********************** -->
+    <!--        Schedule        -->
+    <!-- ********************** -->
+    <string name="x_doses">%d dose(s)</string>
 </resources>
