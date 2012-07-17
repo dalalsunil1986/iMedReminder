@@ -5,6 +5,7 @@ import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 
@@ -102,6 +103,14 @@ public class PrescriptionMedicine implements Serializable {
         this.dosageReminders = dosageReminders;
     }
 
+    public Date getEndDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        calendar.add(Calendar.DATE, totalDaysToTake * (dayInterval + 1) - 1);
+
+        return calendar.getTime();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -142,6 +151,7 @@ public class PrescriptionMedicine implements Serializable {
                 ", prescriptionId=" + (prescription != null ? prescription.getId() : null) +
                 ", medicine=" + medicine +
                 ", startDate=" + startDate +
+                ", endDate=" + getEndDate() +
                 ", dosesToTake=" + dosesToTake +
                 ", dayInterval=" + dayInterval +
                 ", totalDaysToTake=" + totalDaysToTake +

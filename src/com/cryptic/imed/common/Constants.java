@@ -13,6 +13,7 @@ public interface Constants {
 
     String GENERAL_DATE_FORMAT = "EEE MMM dd, yyyy";
     String PRESCRIPTION_DETAILS_DATE_FORMAT = "dd MMMM yyyy";
+    String SQLITE_DATE_FORMAT = "yyyy-MM-dd";
     String GENERAL_TIME_FORMAT = "hh:mm a";
     String GENERAL_DATE_TIME_FORMAT = GENERAL_DATE_FORMAT + " " + GENERAL_TIME_FORMAT;
 }
