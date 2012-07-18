@@ -74,13 +74,13 @@ public class ScheduleController {
     private GenericRawResults<PrescriptionMedicine> queryPrescriptionMedicineList(
             String sqliteFormattedCalendarStartDate, String sqliteFormattedCalendarEndDate) {
         return prescriptionMedicineDao.queryRaw(
-                "select id, date(startDate, '+' || (totalDaysToTake * (dayInterval + 1) - 2) || 'day') as endDate " +
+                "select id, date(startDate, '+' || ((totalDaysToTake - 1) * (dayInterval + 1)) || 'day') as endDate " +
                         "from prescriptionmedicine " +
                         "where startDate <= ? and endDate >= ?",
                 new RawRowMapper<PrescriptionMedicine>() {
                     @Override
                     public PrescriptionMedicine mapRow(String[] columnNames, String[] resultColumns) throws SQLException {
-                        log.debug("prescriptionMedicines id: {}", Integer.parseInt(resultColumns[0]));
+                        log.debug("prescriptionMedicines id: {} endDate: {}", resultColumns[0], resultColumns[1]);
                         return prescriptionMedicineDao.queryForId(Integer.parseInt(resultColumns[0]));
                     }
                 },
