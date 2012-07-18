@@ -6,10 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import com.cryptic.android.widget.calendar.CellBackgroundImage;
 import com.cryptic.android.widget.calendar.SimpleCalendarView;
 import com.cryptic.imed.R;
@@ -22,7 +19,6 @@ import com.cryptic.imed.fragment.prescription.PrescriptionListFragment;
 import com.cryptic.imed.util.DateWithoutTime;
 import com.cryptic.imed.util.photo.util.ImageUtils;
 import com.cryptic.imed.util.view.TwoLineListItemWithImageView;
-import com.cryptic.imed.util.view.ViewUtils;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +27,6 @@ import roboguice.inject.ContentView;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +48,7 @@ public class ScheduleActivity extends RoboActivity {
     @InjectView(R.id.calendar_view)
     private SimpleCalendarView calendarView;
     @InjectView(android.R.id.list)
-    private ListView listView;
+    private LinearLayout medicineListView;
 
     @InjectResource(R.drawable.ic_default_med)
     private Drawable defaultMedicinePhoto;
@@ -61,26 +56,10 @@ public class ScheduleActivity extends RoboActivity {
     private String xDoses;
 
     private Map<DateWithoutTime, List<PrescriptionMedicine>> schedule;
-    private ScheduleActivity.MedicineScheduleListAdapter medicineScheduleListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        medicineScheduleListAdapter = new MedicineScheduleListAdapter();
-        listView.setAdapter(medicineScheduleListAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Prescription prescription = medicineScheduleListAdapter.getItem(position).getPrescription();
-                scheduleController.refresh(prescription);
-
-                Intent intent = new Intent(application, PrescriptionDetailsActivity.class);
-                intent.putExtra(PrescriptionListFragment.KEY_PRESCRIPTION, prescription);
-                startActivity(intent);
-            }
-        });
-
         markScheduledCalendarDates();
     }
 
@@ -110,42 +89,39 @@ public class ScheduleActivity extends RoboActivity {
         preparePrescriptionMedicineList(schedule.containsKey(clickedDate) ? schedule.get(clickedDate) : null);
     }
 
-    private void preparePrescriptionMedicineList(List<PrescriptionMedicine> prescriptionMedicineList) {
-        medicineScheduleListAdapter.setPrescriptionMedicineList(
-                prescriptionMedicineList != null ? prescriptionMedicineList : new ArrayList<PrescriptionMedicine>(0));
-        ViewUtils.setListViewHeightBasedOnChildren(listView);
-    }
-
     public void onYearMonthChanged(View view, int newYear, int newMonth) {
         markScheduledCalendarDates();
         preparePrescriptionMedicineList(null);
     }
 
+    private void preparePrescriptionMedicineList(List<PrescriptionMedicine> prescriptionMedicineList) {
+        medicineListView.removeAllViews();
 
-    private class MedicineScheduleListAdapter extends ArrayAdapter<PrescriptionMedicine> {
-        public MedicineScheduleListAdapter() {
-            super(ScheduleActivity.this, 0);
-        }
+        if (prescriptionMedicineList != null) {
+            for (final PrescriptionMedicine prescriptionMedicine : prescriptionMedicineList) {
+                Medicine medicine = prescriptionMedicine.getMedicine();
 
-        public void setPrescriptionMedicineList(List<PrescriptionMedicine> prescriptionMedicineList) {
-            clear();
+                View view = TwoLineListItemWithImageView.getView(layoutInflater, null, medicineListView,
+                        medicine.getName(),
+                        String.format(xDoses, prescriptionMedicine.getDosesToTake(), medicine.getMedicationUnit()),
+                        ImageUtils.getNonEmptyImage(medicine.getPhoto(), defaultMedicinePhoto));
 
-            for (PrescriptionMedicine prescriptionMedicine : prescriptionMedicineList) {
-                add(prescriptionMedicine);
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Prescription prescription = prescriptionMedicine.getPrescription();
+                        scheduleController.refresh(prescription);
+
+                        Intent intent = new Intent(application, PrescriptionDetailsActivity.class);
+                        intent.putExtra(PrescriptionListFragment.KEY_PRESCRIPTION, prescription);
+                        startActivity(intent);
+                    }
+                });
+
+                medicineListView.addView(view);
             }
 
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            PrescriptionMedicine prescriptionMedicine = (PrescriptionMedicine) getItem(position);
-            Medicine medicine = prescriptionMedicine.getMedicine();
-
-            return TwoLineListItemWithImageView.getView(layoutInflater, convertView, parent,
-                    medicine.getName(),
-                    String.format(xDoses, prescriptionMedicine.getDosesToTake(), medicine.getMedicationUnit()),
-                    ImageUtils.getNonEmptyImage(medicine.getPhoto(), defaultMedicinePhoto));
+            medicineListView.requestLayout();
         }
     }
 }
