@@ -31,6 +31,7 @@ import roboguice.inject.ContentView;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,14 +107,18 @@ public class ScheduleActivity extends RoboActivity {
 
     public void onDateClicked(View view, int year, int month, int dayOfMonth) {
         DateWithoutTime clickedDate = new DateWithoutTime(year, month, dayOfMonth);
-        if (schedule.containsKey(clickedDate)) {
-            medicineScheduleListAdapter.setPrescriptionMedicineList(schedule.get(clickedDate));
-            ViewUtils.setListViewHeightBasedOnChildren(listView);
-        }
+        preparePrescriptionMedicineList(schedule.containsKey(clickedDate) ? schedule.get(clickedDate) : null);
+    }
+
+    private void preparePrescriptionMedicineList(List<PrescriptionMedicine> prescriptionMedicineList) {
+        medicineScheduleListAdapter.setPrescriptionMedicineList(
+                prescriptionMedicineList != null ? prescriptionMedicineList : new ArrayList<PrescriptionMedicine>(0));
+        ViewUtils.setListViewHeightBasedOnChildren(listView);
     }
 
     public void onYearMonthChanged(View view, int newYear, int newMonth) {
         markScheduledCalendarDates();
+        preparePrescriptionMedicineList(null);
     }
 
 
