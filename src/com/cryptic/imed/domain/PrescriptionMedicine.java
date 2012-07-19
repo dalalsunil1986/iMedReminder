@@ -106,7 +106,7 @@ public class PrescriptionMedicine implements Serializable {
     public Date getEndDate() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
-        calendar.add(Calendar.DATE, totalDaysToTake * (dayInterval + 1) - 1);
+        calendar.add(Calendar.DATE, (totalDaysToTake - 1) * (dayInterval + 1));
 
         return calendar.getTime();
     }
