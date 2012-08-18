@@ -5,11 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.cryptic.imed.R;
 import com.cryptic.imed.domain.*;
 import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.table.TableUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.sql.SQLException;
 
 /**
  * @author sharafat
@@ -18,8 +13,6 @@ import java.sql.SQLException;
  *          adb shell setprop log.tag.ORMLite DEBUG
  */
 public class DbHelper extends AbstractDbHelper {
-    private static final Logger log = LoggerFactory.getLogger(DbHelper.class);
-
     private static final String DB_NAME = "imedreminder.db";
     private static final int DB_VERSION = 1;
 
@@ -29,17 +22,15 @@ public class DbHelper extends AbstractDbHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
-        try {
-            TableUtils.createTable(connectionSource, Medicine.class);
-            TableUtils.createTable(connectionSource, Doctor.class);
-            TableUtils.createTable(connectionSource, Pharmacy.class);
-            TableUtils.createTable(connectionSource, Appointment.class);
-            TableUtils.createTable(connectionSource, Dosage.class);
-            TableUtils.createTable(connectionSource, PrescriptionMedicine.class);
-            TableUtils.createTable(connectionSource, Prescription.class);
-        } catch (SQLException e) {
-            log.error("Error creating database.", e);
-        }
+        createTables(connectionSource,
+                Medicine.class,
+                Doctor.class,
+                Pharmacy.class,
+                Appointment.class,
+                Dosage.class,
+                PrescriptionMedicine.class,
+                Prescription.class,
+                DosagesTaken.class);
     }
 
     @Override

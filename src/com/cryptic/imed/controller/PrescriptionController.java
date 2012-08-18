@@ -5,6 +5,8 @@ import com.cryptic.imed.domain.Doctor;
 import com.cryptic.imed.domain.Dosage;
 import com.cryptic.imed.domain.Prescription;
 import com.cryptic.imed.domain.PrescriptionMedicine;
+import com.cryptic.imed.service.AlarmService;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
@@ -22,6 +24,8 @@ public class PrescriptionController {
     private final RuntimeExceptionDao<Dosage, Integer> dosageDao;
     private final RuntimeExceptionDao<Doctor, Integer> doctorDao;
 
+    @Inject
+    private AlarmService alarmService;
 
     public PrescriptionController() {
         OrmLiteSqliteOpenHelper dbHelper = DbHelper.getHelper();
@@ -30,12 +34,14 @@ public class PrescriptionController {
         prescriptionMedicineDao = dbHelper.getRuntimeExceptionDao(PrescriptionMedicine.class);
         dosageDao = dbHelper.getRuntimeExceptionDao(Dosage.class);
         doctorDao = dbHelper.getRuntimeExceptionDao(Doctor.class);
-    }
+   }
 
     public void save(Prescription prescription) {
         prescriptionDao.createOrUpdate(prescription);
         delete(prescription.getMedicines());
         savePrescriptionMedicines(prescription);
+
+        alarmService.setMedicineReminderAlarm();
     }
 
     private void savePrescriptionMedicines(Prescription prescription) {

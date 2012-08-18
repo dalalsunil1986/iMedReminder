@@ -167,4 +167,12 @@
     <!--        Schedule        -->
     <!-- ********************** -->
     <string name="x_doses">%d dose(s)</string>
+
+
+    <!-- ********************** -->
+    <!--     Notification       -->
+    <!-- ********************** -->
+    <string name="notification_ticker_text">iMedReminder Reminder</string>
+    <string name="medicine_schedule_reminder">Medicine Schedule Reminder</string>
+    <string name="notification_reminder">iMedReminder Reminder</string>
 </resources>

@@ -16,6 +16,10 @@ public class DateWithoutTime implements Cloneable {
 
     private int year, month, date;
 
+    public DateWithoutTime() {
+        setDate(Calendar.getInstance());
+    }
+
     public DateWithoutTime(int year, int month, int date) {
         setDate(year, month, date);
     }
@@ -56,7 +60,7 @@ public class DateWithoutTime implements Cloneable {
         return new GregorianCalendar(year, month, date);
     }
 
-    public Date getAsDate() {
+    public Date asDate() {
         return getDateAsCalendar().getTime();
     }
 
@@ -80,7 +84,7 @@ public class DateWithoutTime implements Cloneable {
     }
 
     public CharSequence format(String format) {
-        return DateFormat.format(format, getAsDate());
+        return DateFormat.format(format, asDate());
     }
 
     public boolean before(DateWithoutTime dateWithoutTime) {
